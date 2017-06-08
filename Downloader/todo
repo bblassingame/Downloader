@@ -1,0 +1,27 @@
+We can probably consolidate the video sites that are using embedded players and just look for the "file:" var in the scrip with ".flv" or ".mp4".  It might make it a little more robust.
+we really need an event system to transition threads 
+need http504 exception handling in httputil at the bufferedinputreader
+We need to support partial downloads for really slow connections
+add something to the logging to keep the URL so I don't keep trying to get the same URL and getting rejected
+Need a system so that if we find a link but the download fails, we try another link
+Do multiple downloads and keep the one with the biggest size - only if a monthly data cap is not in place
+
+add vidbull
+add flashx
+
+
+Add some logging levels so that we can get more or less output from the appliation
+support live stream
+
+
+Implement better searching for the Show object when we're looking for seasons
+fix the file type that we're saving with, it's not always mp4
+fix the bug where the last download doesn't log its completion
+fix the number of waiting downloads counter
+fix bug where download is added when it shouldn't.  I queued up 4 episodes, as 1 or 2 finished, another was added.  And I'm downloading shows in the wrong order.
+	NOTE:  This looks like the UpdateNumberEpisodes function is malfunctioning and the watched/completed values are 0 at the end.
+
+	
+Disconnect the downloader so that it can read downloads from sources such as files, not just whatever is passed directly to it?  Not sure if this is really that valuable
+Make it where the number of downloads and download threads actually stay in sync.  Don't queue up 5 downloads just because we have that many threads available.
+Why don't I use all of the download threads that I have available?
