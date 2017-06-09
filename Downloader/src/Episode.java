@@ -149,27 +149,27 @@ public class Episode
 //				elemTemp.m_strType = Constants.strSITETYPE_VODLOCKER;
 //				elemsReturn.add( elemTemp );
 //			}
-//			else if( -1 != e.text().indexOf( "streamin.to" ) )
-//			{
-//				CreateData elemTemp = new CreateData();
-//				elemTemp.m_elemCreate = e;
-//				elemTemp.m_strType = Constants.strSITETYPE_STREAMINTO;
-//				elemsReturn.add( elemTemp );
-//			}
-//			else if( -1 != e.text().indexOf( "vidzi.tv" ) )
-//			{
-//				CreateData elemTemp = new CreateData();
-//				elemTemp.m_elemCreate = e;
-//				elemTemp.m_strType = Constants.strSITETYPE_VIDZITV;
-//				elemsReturn.add( elemTemp );
-//			}
-			/*else*/ if( -1 != e.text().indexOf( "thevideo.me" ) )
+			/*else*/ if( -1 != e.text().indexOf( "streamin.to" ) )
 			{
 				CreateData elemTemp = new CreateData();
 				elemTemp.m_elemCreate = e;
-				elemTemp.m_strType = Constants.strSITETYPE_THEVIDEOME;
+				elemTemp.m_strType = Constants.strSITETYPE_STREAMINTO;
 				elemsReturn.add( elemTemp );
 			}
+			else if( -1 != e.text().indexOf( "vidzi.tv" ) )
+			{
+				CreateData elemTemp = new CreateData();
+				elemTemp.m_elemCreate = e;
+				elemTemp.m_strType = Constants.strSITETYPE_VIDZITV;
+				elemsReturn.add( elemTemp );
+			}
+//			else if( -1 != e.text().indexOf( "thevideo.me" ) )
+//			{
+//				CreateData elemTemp = new CreateData();
+//				elemTemp.m_elemCreate = e;
+//				elemTemp.m_strType = Constants.strSITETYPE_THEVIDEOME;
+//				elemsReturn.add( elemTemp );
+//			}
 //			else if( -1 != e.text().indexOf( "vidbull.com" ) )
 //			{
 //				CreateData elemTemp = new CreateData();
