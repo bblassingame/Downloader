@@ -1,9 +1,14 @@
+package com.blassingame.downloader.show;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class VideoSiteTheVideoMe extends VideoSite
+import com.blassingame.downloader.download.DownloadInfo;
+import com.blassingame.downloader.utility.HttpData;
+import com.blassingame.downloader.utility.ParseUtility;
+
+public class VideoSiteStreaminTo extends VideoSite
 {
 	
 	protected boolean GetVideoLink()
@@ -39,26 +44,12 @@ public class VideoSiteTheVideoMe extends VideoSite
 		{
 			if( false == e.attr("src").isEmpty() )
 			{
-				String strTemp = e.attr( "src" );
-				
-				// check for a second http:// address in the link, it's just a bad link that we need to skip and there's no vid to download
-				if( 0 != strTemp.lastIndexOf( "http://" ) )
-				{
-					return false;
-				}
-				
-				m_videoSiteData.SetURLFrame( strTemp );
+				m_videoSiteData.SetURLFrame( e.attr( "src" ) );
 				return true;
 			}
 		}
 		
-		if( 0 != m_videoSiteData.m_urlFrame.toString().lastIndexOf( "http:\\" ) )
-		{
-			System.out.println( "Found a bad frame URL for TheVideoMe, skipping..." );
-			return false;
-		}
-		
-		System.out.println( "Unable to get the Frame URL for TheVideoMe" );
+		System.out.println( "Unable to get the Frame URL for StreaminTo" );
 		return false;
 	}
 
@@ -71,7 +62,7 @@ public class VideoSiteTheVideoMe extends VideoSite
 		// get the show's html
 		if( false == m_HttpUtil.GetPageHtml( httpData ) )
 		{
-			System.out.println( "Unable to get the Frame HTML for TheVideoMe" );
+			System.out.println( "Unable to get the Frame HTML for StreaminTo" );
 			return false;
 		}
 		
@@ -94,7 +85,7 @@ public class VideoSiteTheVideoMe extends VideoSite
 		String strText = doc.text();
 		if( true == DeletedTextFound( strText ) )
 		{
-			System.out.println( "This TheVideoMe file was deleted..." );
+			System.out.println( "This StreaminTo file was deleted..." );
 			return true;
 		}
 		else
@@ -107,34 +98,54 @@ public class VideoSiteTheVideoMe extends VideoSite
 	{
 		Document doc = Jsoup.parse( m_videoSiteData.m_strHtmlFrame );
 		
+		//
+		// THIS IS THE OLD WAY OF GETTING A LINK - CHANGED 5/16/17
+		//
+//		// get the elements with a src attribute and find the one with embed in the source, that's the URL for the video URL
+//		String strEmbedURL = "";
+//		Elements elemsScripts = doc.select( "script" );
+//		for( Element e : elemsScripts )
+//		{
+//			if( -1 != e.data().indexOf( "jwplayer" ) )
+//			{
+//				strEmbedURL = ParseUtility.GetJSVarData( e.data(), "file", 2 );
+//				if( 0 == strEmbedURL.compareTo( "ERROR:  NOT FOUND" ) )
+//				{
+//					System.out.println( "The javascript didn't contain the file path for the video" );
+//					return false;
+//				}
+//				else
+//				{
+////					System.out.println( "embed URL:  " + strEmbedURL );
+//					m_videoSiteData.m_strVideoLink = strEmbedURL;
+//					return true;
+//				}
+//			}
+//		}
+		
+		
+		// this is the new way, it's the same as what we saw with VidziTV
 		// get the elements with a src attribute and find the one with embed in the source, that's the URL for the video URL
 		String strEmbedURL = "";
 		Elements elemsScripts = doc.select( "script" );
 		for( Element e : elemsScripts )
 		{
-			if( -1 != e.data().indexOf( "jwConfig_vars" ) )
+			String strScript = e.data();	// use this so that we can stop calling e.data() so much and for the unpacking part
+			if( -1 != strScript.indexOf( "vplayer" ) )
 			{
-				// find the index of "480p", then back up from there to find "file"
-				String strScript = e.data();
-				int nStartIndex = strScript.indexOf( "480p" );
-				if( -1 == nStartIndex )
-					nStartIndex = strScript.indexOf( "360p" );
-				nStartIndex = strScript.lastIndexOf( "file", nStartIndex ) + 5;
-				strEmbedURL = ParseUtility.GetJSVarDataFromIndex( strScript, "file", nStartIndex );
-//				System.out.println( "embed URL:  " + strEmbedURL );
+				// we need to check if the script should be unpacked before we try to parse it
+				if( 0 == strScript.indexOf( "eval" ) )
+					strScript = UnpackScript( strScript );
 				
-				if( -1 == strEmbedURL.indexOf( "http" ) )
-				{
-					System.out.println( "The parse utility didn't find a valid video link" + String.format( " link = %s", strEmbedURL ) );
-					return false;
-				}
-				else
-				{
-					m_videoSiteData.m_strVideoLink = strEmbedURL;
-					return true;
-				}
+				strEmbedURL = ParseUtility.GetJSVarData( strScript, "file", 1 );
+//				System.out.println( "embed URL:  " + strEmbedURL );
+				m_videoSiteData.m_strVideoLink = strEmbedURL;
+				// check if we got a file name with .mp4 or .flv and exit otherwise
+				return IsVideoLinkValid( m_videoSiteData.m_strVideoLink );
 			}
 		}
+		
+		
 		
 //		// validate the url with what we're expecting by building what we expect to find
 //		String strExpectedURL = "";
@@ -150,7 +161,7 @@ public class VideoSiteTheVideoMe extends VideoSite
 //			return "";
 //		}
 		
-		System.out.println( "Unable to get the Video URL for TheVideoMe" );
+		System.out.println( "Unable to get the Video URL for StreaminTo" );
 		return false;
 	}
 	
@@ -186,6 +197,6 @@ public class VideoSiteTheVideoMe extends VideoSite
 		
 		m_videoSiteData.m_lFileSize = m_HttpUtil.GetFileSize( httpData );
 		return false;
-	}	
-	
+	}
+
 }

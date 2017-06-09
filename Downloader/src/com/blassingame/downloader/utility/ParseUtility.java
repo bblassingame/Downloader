@@ -1,8 +1,12 @@
+package com.blassingame.downloader.utility;
 import java.util.ArrayList;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.*;
 import org.jsoup.select.*;
+
+import com.blassingame.downloader.application.Constants;
+import com.blassingame.downloader.download.DownloadInfo;
 
 public class ParseUtility
 {
@@ -410,11 +414,4 @@ public class ParseUtility
 		return dataScripts;
 	}
 	
-}
-
-class EvalInfo
-{
-	public String m_strEvalFunctionAndParams = "";
-	public String m_strEvalFunction = "";
-	public ArrayList<String> m_straEvalParams = new ArrayList<String>();
 }

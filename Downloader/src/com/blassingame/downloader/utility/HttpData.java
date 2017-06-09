@@ -1,3 +1,4 @@
+package com.blassingame.downloader.utility;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
@@ -14,7 +15,7 @@ public class HttpData
 	/*********************************************************/
 	// HttpUtil generated data
 	
-	HttpURLConnection m_httpURLConnection = null;
+	public HttpURLConnection m_httpURLConnection = null;
 
 	/*********************************************************/
 	// Primary page parameters

@@ -30,3 +30,4 @@ Update the Shows.log so that the starting season is updated once we complete a s
 Fix it so that weirdly named episodes such as "The Office Season 9 Special" don't break things or cause an error
 Keep looking at why we can't get the file size on a lot of episodes
 Order the log so that the episodes are kept in order in the log, just a convenience thing
+Maybe add an option to grab the smallest file instead of the largest to conserve data

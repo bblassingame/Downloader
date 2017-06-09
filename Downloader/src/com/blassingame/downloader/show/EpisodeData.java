@@ -1,8 +1,11 @@
+package com.blassingame.downloader.show;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
 import org.jsoup.nodes.Element;
+
+import com.blassingame.downloader.utility.ExceptionUtility;
 
 public class EpisodeData
 {

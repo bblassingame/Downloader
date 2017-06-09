@@ -1,9 +1,14 @@
+package com.blassingame.downloader.show;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class VideoSiteVODLocker extends VideoSite
+import com.blassingame.downloader.download.DownloadInfo;
+import com.blassingame.downloader.utility.HttpData;
+import com.blassingame.downloader.utility.ParseUtility;
+
+public class VideoSiteTheVideoMe extends VideoSite
 {
 	
 	protected boolean GetVideoLink()
@@ -39,12 +44,26 @@ public class VideoSiteVODLocker extends VideoSite
 		{
 			if( false == e.attr("src").isEmpty() )
 			{
-				m_videoSiteData.SetURLFrame( e.attr( "src" ) );
+				String strTemp = e.attr( "src" );
+				
+				// check for a second http:// address in the link, it's just a bad link that we need to skip and there's no vid to download
+				if( 0 != strTemp.lastIndexOf( "http://" ) )
+				{
+					return false;
+				}
+				
+				m_videoSiteData.SetURLFrame( strTemp );
 				return true;
 			}
 		}
 		
-		System.out.println( "Unable to get the Frame URL for VODLocker" );
+		if( 0 != m_videoSiteData.m_urlFrame.toString().lastIndexOf( "http:\\" ) )
+		{
+			System.out.println( "Found a bad frame URL for TheVideoMe, skipping..." );
+			return false;
+		}
+		
+		System.out.println( "Unable to get the Frame URL for TheVideoMe" );
 		return false;
 	}
 
@@ -57,7 +76,7 @@ public class VideoSiteVODLocker extends VideoSite
 		// get the show's html
 		if( false == m_HttpUtil.GetPageHtml( httpData ) )
 		{
-			System.out.println( "Unable to get the Frame HTML for VODLocker" );
+			System.out.println( "Unable to get the Frame HTML for TheVideoMe" );
 			return false;
 		}
 		
@@ -80,7 +99,7 @@ public class VideoSiteVODLocker extends VideoSite
 		String strText = doc.text();
 		if( true == DeletedTextFound( strText ) )
 		{
-			System.out.println( "This VOD file was deleted..." );
+			System.out.println( "This TheVideoMe file was deleted..." );
 			return true;
 		}
 		else
@@ -98,12 +117,27 @@ public class VideoSiteVODLocker extends VideoSite
 		Elements elemsScripts = doc.select( "script" );
 		for( Element e : elemsScripts )
 		{
-			if( -1 != e.data().indexOf( "flvplayer" ) )
+			if( -1 != e.data().indexOf( "jwConfig_vars" ) )
 			{
-				strEmbedURL = ParseUtility.GetJSVarData( e.data(), "file" );
+				// find the index of "480p", then back up from there to find "file"
+				String strScript = e.data();
+				int nStartIndex = strScript.indexOf( "480p" );
+				if( -1 == nStartIndex )
+					nStartIndex = strScript.indexOf( "360p" );
+				nStartIndex = strScript.lastIndexOf( "file", nStartIndex ) + 5;
+				strEmbedURL = ParseUtility.GetJSVarDataFromIndex( strScript, "file", nStartIndex );
 //				System.out.println( "embed URL:  " + strEmbedURL );
-				m_videoSiteData.m_strVideoLink = strEmbedURL;
-				return true;
+				
+				if( -1 == strEmbedURL.indexOf( "http" ) )
+				{
+					System.out.println( "The parse utility didn't find a valid video link" + String.format( " link = %s", strEmbedURL ) );
+					return false;
+				}
+				else
+				{
+					m_videoSiteData.m_strVideoLink = strEmbedURL;
+					return true;
+				}
 			}
 		}
 		
@@ -121,7 +155,7 @@ public class VideoSiteVODLocker extends VideoSite
 //			return "";
 //		}
 		
-		System.out.println( "Unable to get the Video URL for VODLocker" );
+		System.out.println( "Unable to get the Video URL for TheVideoMe" );
 		return false;
 	}
 	
@@ -157,6 +191,6 @@ public class VideoSiteVODLocker extends VideoSite
 		
 		m_videoSiteData.m_lFileSize = m_HttpUtil.GetFileSize( httpData );
 		return false;
-	}
-
+	}	
+	
 }

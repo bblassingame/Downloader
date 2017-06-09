@@ -1,3 +1,4 @@
+package com.blassingame.downloader.utility;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -299,7 +300,3 @@ public class FileUtility
 	}
 	
 }
-
-@SuppressWarnings("serial")
-class StringArray extends ArrayList<String> {}
-

@@ -1,3 +1,4 @@
+package com.blassingame.downloader.show;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -6,6 +7,11 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
+import com.blassingame.downloader.application.Constants;
+import com.blassingame.downloader.download.DownloadMgr;
+import com.blassingame.downloader.utility.HttpData;
+import com.blassingame.downloader.utility.HttpUtil;
 
 class CompareVideoSite implements Comparator<VideoSite>
 {

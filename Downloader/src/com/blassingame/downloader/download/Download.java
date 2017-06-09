@@ -1,3 +1,7 @@
+package com.blassingame.downloader.download;
+import com.blassingame.downloader.utility.FileUtility;
+import com.blassingame.downloader.utility.HttpUtil;
+import com.blassingame.downloader.utility.StringArray;
 
 enum eDOWNLOADSTATE
 {

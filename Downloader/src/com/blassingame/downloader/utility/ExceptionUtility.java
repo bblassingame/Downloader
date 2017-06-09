@@ -1,3 +1,4 @@
+package com.blassingame.downloader.utility;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;

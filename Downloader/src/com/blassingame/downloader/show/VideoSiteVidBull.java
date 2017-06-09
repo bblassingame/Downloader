@@ -1,11 +1,16 @@
+package com.blassingame.downloader.show;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class VideoSiteVidziTv extends VideoSite
-{
+import com.blassingame.downloader.download.DownloadInfo;
+import com.blassingame.downloader.utility.HttpData;
+import com.blassingame.downloader.utility.ParseUtility;
 
+public class VideoSiteVidBull extends VideoSite
+{
+	
 	protected boolean GetVideoLink()
 	{
 		// for the VODLocker site, we try to get the video off the embedded frame on the jump site
@@ -44,7 +49,7 @@ public class VideoSiteVidziTv extends VideoSite
 			}
 		}
 		
-		System.out.println( "Unable to get the Frame URL for VidziTv" );
+		System.out.println( "Unable to get the Frame URL for VidBull" );
 		return false;
 	}
 
@@ -57,7 +62,7 @@ public class VideoSiteVidziTv extends VideoSite
 		// get the show's html
 		if( false == m_HttpUtil.GetPageHtml( httpData ) )
 		{
-			System.out.println( "Unable to get the Frame HTML for VidziTv" );
+			System.out.println( "Unable to get the Frame HTML for VidBull" );
 			return false;
 		}
 		
@@ -80,7 +85,7 @@ public class VideoSiteVidziTv extends VideoSite
 		String strText = doc.text();
 		if( true == DeletedTextFound( strText ) )
 		{
-			System.out.println( "This VidziTv file was deleted..." );
+			System.out.println( "This VidBull file was deleted..." );
 			return true;
 		}
 		else
@@ -98,18 +103,12 @@ public class VideoSiteVidziTv extends VideoSite
 		Elements elemsScripts = doc.select( "script" );
 		for( Element e : elemsScripts )
 		{
-			String strScript = e.data();	// use this so that we can stop calling e.data() so much and for the unpacking part
-			if( -1 != strScript.indexOf( "vplayer" ) )
+			if( -1 != e.data().indexOf( "vplayer" ) )
 			{
-				// we need to check if the script should be unpacked before we try to parse it
-				if( 0 == strScript.indexOf( "eval" ) )
-					strScript = UnpackScript( strScript );
-				
-				strEmbedURL = ParseUtility.GetJSVarData( strScript, "file", 2 );
+				strEmbedURL = ParseUtility.GetJSVarData( e.data(), "file", 2 );
 //				System.out.println( "embed URL:  " + strEmbedURL );
 				m_videoSiteData.m_strVideoLink = strEmbedURL;
-				// check if we got a file name with .mp4 or .flv and exit otherwise
-				return IsVideoLinkValid( m_videoSiteData.m_strVideoLink );
+				return true;
 			}
 		}
 		
@@ -127,48 +126,9 @@ public class VideoSiteVidziTv extends VideoSite
 //			return "";
 //		}
 		
-		System.out.println( "Unable to get the Video URL for VidziTv" );
+		System.out.println( "Unable to get the Video URL for VidBull" );
 		return false;
 	}
-	
-//	private String UnpackScript( String strScript )
-//	{
-//		// this function implements the following javascript function found on the VidziTV size
-//		// function(p,a,c,k,e,d){while(c--)if(k[c])p=p.replace(new RegExp('\\b'+c.toString(a)+'\\b','g'),k[c]);return p}
-//		
-//	    // get what's inside the eval() function
-//	    EvalInfo evalInfo = new EvalInfo();
-//	    evalInfo.m_strEvalFunctionAndParams = strScript;
-//	    ParseUtility.GetJSEvalFunction( evalInfo );
-//	    
-//		if( 0 != Constants.strVIDZITV_SCRIPT.compareTo( evalInfo.m_strEvalFunctionAndParams ) )
-//		{
-////			System.out.println( "The JS p.a.c.k.e.d. footprint is different" );
-//			if( 0 != Constants.strVIDZITV_FUNCTION.compareTo( evalInfo.m_strEvalFunction ) )
-//				System.out.println( "--->The function is different, we need to account for it" );
-//		}
-//		
-//		// clean up the script so that it conforms with java string standards and not javascript string standards
-//		// we're getting rid of \' and converting to ', because we don't have to escape singles quotes in java strings
-//		evalInfo.m_straEvalParams.set( 3, evalInfo.m_straEvalParams.get(3).replace( "\\'", "'" ) );
-//		
-//		// set the variables that we need to unpack the script
-//	    String p = evalInfo.m_straEvalParams.get(0);
-//	    p = p.substring(1, p.length() - 1 );
-//	    int a = Integer.parseInt( evalInfo.m_straEvalParams.get(1) );
-//	    int c = Integer.parseInt( evalInfo.m_straEvalParams.get(2) );
-//	    String strSubs = evalInfo.m_straEvalParams.get(3);
-//	    strSubs = strSubs.substring( 1, strSubs.length() );
-//	    strSubs = strSubs.substring( 0, strSubs.indexOf( "'" ) );
-//	    ArrayList<String> k = new ArrayList<String>( Arrays.asList( strSubs.split("\\|") ) );
-//	    
-//	    while( 0 < c-- )
-//	    	p = p.replaceAll( "\\b" + Integer.toString(c, a) + "\\b", k.get(c) );
-//	    
-////	    System.out.println( p );
-//
-//	    return p;
-//	}
 	
 	@Override
 	protected boolean QueueDownload()
@@ -198,10 +158,10 @@ public class VideoSiteVidziTv extends VideoSite
 		// set up the http data for the newly found video link
 		HttpData httpData = new HttpData();
 		httpData.m_urlLink = m_HttpUtil.ReturnURL( m_videoSiteData.m_strVideoLink );
-		httpData.m_strReferer = m_videoSiteData.m_urlFrame.toString();
+		httpData.m_strReferer = m_videoSiteData.m_urlJumpSite.toString();
 		
 		m_videoSiteData.m_lFileSize = m_HttpUtil.GetFileSize( httpData );
 		return false;
 	}
-	
+
 }

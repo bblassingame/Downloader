@@ -1,3 +1,4 @@
+package com.blassingame.downloader.show;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -5,6 +6,12 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
+import com.blassingame.downloader.application.Constants;
+import com.blassingame.downloader.download.DownloadMgr;
+import com.blassingame.downloader.utility.FileUtility;
+import com.blassingame.downloader.utility.HttpData;
+import com.blassingame.downloader.utility.HttpUtil;
 
 public class Show
 {

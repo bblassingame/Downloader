@@ -1,3 +1,4 @@
+package com.blassingame.downloader.utility;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -12,6 +13,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import com.blassingame.downloader.download.DownloadInfo;
 
 
 public class HttpUtil

@@ -1,9 +1,14 @@
+package com.blassingame.downloader.show;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class VideoSiteVidBull extends VideoSite
+import com.blassingame.downloader.download.DownloadInfo;
+import com.blassingame.downloader.utility.HttpData;
+import com.blassingame.downloader.utility.ParseUtility;
+
+public class VideoSiteVODLocker extends VideoSite
 {
 	
 	protected boolean GetVideoLink()
@@ -44,7 +49,7 @@ public class VideoSiteVidBull extends VideoSite
 			}
 		}
 		
-		System.out.println( "Unable to get the Frame URL for VidBull" );
+		System.out.println( "Unable to get the Frame URL for VODLocker" );
 		return false;
 	}
 
@@ -57,7 +62,7 @@ public class VideoSiteVidBull extends VideoSite
 		// get the show's html
 		if( false == m_HttpUtil.GetPageHtml( httpData ) )
 		{
-			System.out.println( "Unable to get the Frame HTML for VidBull" );
+			System.out.println( "Unable to get the Frame HTML for VODLocker" );
 			return false;
 		}
 		
@@ -80,7 +85,7 @@ public class VideoSiteVidBull extends VideoSite
 		String strText = doc.text();
 		if( true == DeletedTextFound( strText ) )
 		{
-			System.out.println( "This VidBull file was deleted..." );
+			System.out.println( "This VOD file was deleted..." );
 			return true;
 		}
 		else
@@ -98,9 +103,9 @@ public class VideoSiteVidBull extends VideoSite
 		Elements elemsScripts = doc.select( "script" );
 		for( Element e : elemsScripts )
 		{
-			if( -1 != e.data().indexOf( "vplayer" ) )
+			if( -1 != e.data().indexOf( "flvplayer" ) )
 			{
-				strEmbedURL = ParseUtility.GetJSVarData( e.data(), "file", 2 );
+				strEmbedURL = ParseUtility.GetJSVarData( e.data(), "file" );
 //				System.out.println( "embed URL:  " + strEmbedURL );
 				m_videoSiteData.m_strVideoLink = strEmbedURL;
 				return true;
@@ -121,7 +126,7 @@ public class VideoSiteVidBull extends VideoSite
 //			return "";
 //		}
 		
-		System.out.println( "Unable to get the Video URL for VidBull" );
+		System.out.println( "Unable to get the Video URL for VODLocker" );
 		return false;
 	}
 	

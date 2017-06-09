@@ -1,3 +1,4 @@
+package com.blassingame.downloader.application;
 
 public class Constants
 {

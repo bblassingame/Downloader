@@ -1,6 +1,10 @@
+package com.blassingame.downloader.download;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import com.blassingame.downloader.application.Constants;
 
 public class DownloadMgr implements Runnable
 {
@@ -8,7 +12,7 @@ public class DownloadMgr implements Runnable
 /********************************************************************************/
 //	CONSTRUCTOR/DESCTRUCTOR
 /********************************************************************************/
-	DownloadMgr()
+	public DownloadMgr()
 	{
 		for( int i = 0 ; i < Constants.nNUM_OF_DOWNLOAD_THREADS ; i++ )
 		{

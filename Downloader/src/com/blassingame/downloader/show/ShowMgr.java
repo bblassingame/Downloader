@@ -1,5 +1,9 @@
+package com.blassingame.downloader.show;
 import java.util.Iterator;
 import java.util.LinkedList;
+
+import com.blassingame.downloader.download.DownloadMgr;
+import com.blassingame.downloader.utility.FileUtility;
 
 public class ShowMgr implements Runnable
 {
@@ -202,14 +206,3 @@ public class ShowMgr implements Runnable
 
 }
 
-class NewShowInfo
-{
-	
-	public String m_strURLName = "";
-	public String m_strShowURL = "";
-	public int m_nStartingSeason = 1;
-	
-}
-
-@SuppressWarnings("serial")
-class NewShowInfoQueue extends LinkedList<NewShowInfo> {}

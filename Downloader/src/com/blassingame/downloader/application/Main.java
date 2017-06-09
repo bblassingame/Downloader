@@ -1,4 +1,10 @@
+package com.blassingame.downloader.application;
+
 import java.util.Scanner;
+
+import com.blassingame.downloader.download.DownloadMgr;
+import com.blassingame.downloader.show.NewShowInfo;
+import com.blassingame.downloader.show.ShowMgr;
 
 public class Main
 {

@@ -1,5 +1,8 @@
+package com.blassingame.downloader.show;
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import com.blassingame.downloader.utility.ExceptionUtility;
 
 public class ShowData
 {

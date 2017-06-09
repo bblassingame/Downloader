@@ -1,7 +1,12 @@
+package com.blassingame.downloader.show;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
+import com.blassingame.downloader.utility.HttpData;
+import com.blassingame.downloader.utility.ParseUtility;
 
 public class VideoSiteCloudzilla extends VideoSite
 {

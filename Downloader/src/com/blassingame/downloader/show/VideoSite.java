@@ -1,10 +1,16 @@
+package com.blassingame.downloader.show;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
-interface VideoSiteCallback
-{
-	public boolean OnDownloadComplete( String strStatus );
-}
+import com.blassingame.downloader.application.Constants;
+import com.blassingame.downloader.download.DownloadInfo;
+import com.blassingame.downloader.download.DownloadMgr;
+import com.blassingame.downloader.utility.EvalInfo;
+import com.blassingame.downloader.utility.FileUtility;
+import com.blassingame.downloader.utility.HttpData;
+import com.blassingame.downloader.utility.HttpUtil;
+import com.blassingame.downloader.utility.ParseUtility;
 
 enum eVIDEOSITESTATUS
 {
