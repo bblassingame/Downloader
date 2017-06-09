@@ -25,3 +25,8 @@ fix bug where download is added when it shouldn't.  I queued up 4 episodes, as 1
 Disconnect the downloader so that it can read downloads from sources such as files, not just whatever is passed directly to it?  Not sure if this is really that valuable
 Make it where the number of downloads and download threads actually stay in sync.  Don't queue up 5 downloads just because we have that many threads available.
 Why don't I use all of the download threads that I have available?
+Redesign so that we don't have to go back through all the episodes in a season before we begin downloading
+Update the Shows.log so that the starting season is updated once we complete a season
+Fix it so that weirdly named episodes such as "The Office Season 9 Special" don't break things or cause an error
+Keep looking at why we can't get the file size on a lot of episodes
+Order the log so that the episodes are kept in order in the log, just a convenience thing
