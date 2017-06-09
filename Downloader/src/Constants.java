@@ -33,8 +33,8 @@ public class Constants
 //	String Constants
 /********************************************************************************/
 	// projectfreetv url constants
-	static public String strPROJFREETV_BASE_URL = "http://projectfreetv.at";
-	static public String strPROJFREETV_BASE_SERIES_URL = "http://projectfreetv.at/free/";
+	static public String strPROJFREETV_BASE_URL = "http://project-free-tv.li/";
+	static public String strPROJFREETV_BASE_SERIES_URL = "http://project-free-tv.li/free/";
 	
 	// preferred video sites - search strings
 	static public String strSITE_CLOUDZILLA = "cloudzilla.to";
