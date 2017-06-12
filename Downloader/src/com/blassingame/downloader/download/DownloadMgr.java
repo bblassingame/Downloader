@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.blassingame.downloader.application.Constants;
+import com.blassingame.downloader.logger.LogMgr;
 
 public class DownloadMgr implements Runnable
 {
@@ -14,6 +15,8 @@ public class DownloadMgr implements Runnable
 /********************************************************************************/
 	public DownloadMgr()
 	{
+		m_LogMgr = LogMgr.GetLogMgr();
+		
 		for( int i = 0 ; i < Constants.nNUM_OF_DOWNLOAD_THREADS ; i++ )
 		{
 			String strThreadName = String.format( "Download Thread %d", i );
@@ -30,7 +33,8 @@ public class DownloadMgr implements Runnable
 	@Override
 	public void run()
 	{
-		System.out.println( "Beginning the Download Mgr thread..." );
+//		System.out.println( "Beginning the Download Mgr thread..." );
+		m_LogMgr.LogDebug( "Beginning the Download Mgr thread...", this );
 		while( GetContinue() )
 		{
 //			System.out.println( "Number of Downloads left:  " + m_qDownloads.size() );
@@ -71,7 +75,8 @@ public class DownloadMgr implements Runnable
 	public synchronized void AddDownload( DownloadInfo dlInfo )
 	{
 		m_qWaitingDownloads.add( dlInfo );
-		System.out.println( "Download Added:  " + dlInfo.m_strName + "  " + dlInfo.m_strType + "  " + dlInfo.m_strURL + "    Num of Waiting Downloads:  " + m_qWaitingDownloads.size() );
+//		System.out.println( "Download Added:  " + dlInfo.m_strName + "  " + dlInfo.m_strType + "  " + dlInfo.m_strURL + "    Num of Waiting Downloads:  " + m_qWaitingDownloads.size() );
+		m_LogMgr.LogInfo( "Download Added:  " + dlInfo.m_strName + "  " + dlInfo.m_strType + "  " + dlInfo.m_strURL + "    Num of Waiting Downloads:  " + m_qWaitingDownloads.size(), this );
 	}
 	
 /********************************************************************************/
@@ -80,8 +85,10 @@ public class DownloadMgr implements Runnable
 	public synchronized void AddCompletedDownloadInfo( DownloadInfo dlInfo )
 	{
 		m_qCompletedDownloads.add( dlInfo );
-		System.out.println( "Download " + dlInfo.m_strName + "  " + dlInfo.m_strType + "  finished with status  " + dlInfo.m_eDownloadStatus + "\nNum of Waiting Downloads:  " + m_qWaitingDownloads.size() );
-		System.out.println( "Completed downloads queue size on AddCompletedDownloadInfo:  " + m_qCompletedDownloads.size() );
+//		System.out.println( "Download " + dlInfo.m_strName + "  " + dlInfo.m_strType + "  finished with status  " + dlInfo.m_eDownloadStatus + "\nNum of Waiting Downloads:  " + m_qWaitingDownloads.size() );
+//		System.out.println( "Completed downloads queue size on AddCompletedDownloadInfo:  " + m_qCompletedDownloads.size() );
+		m_LogMgr.LogInfo( "Download " + dlInfo.m_strName + "  " + dlInfo.m_strType + "  finished with status  " + dlInfo.m_eDownloadStatus + "\nNum of Waiting Downloads:  " + m_qWaitingDownloads.size(), this );
+		m_LogMgr.LogInfo( "Completed downloads queue size on AddCompletedDownloadInfo:  " + m_qCompletedDownloads.size(), this );
 	}
 
 /********************************************************************************/
@@ -90,6 +97,7 @@ public class DownloadMgr implements Runnable
 	private void ProcessQueues()
 	{
 //		System.out.println( "\nProcessing Download Queue..." );
+		m_LogMgr.LogDebug( "Processing Download Queue...", this );
 
 		if( true == m_bContinue )
 		{
@@ -105,6 +113,7 @@ public class DownloadMgr implements Runnable
 				else if( dl.GetDownloadState() == eDOWNLOADSTATE.eDOWNLOADSTATE_DOWNLOADING )
 				{
 //					System.out.println( "Download In Progress..." );
+					m_LogMgr.LogDebug( "Download In Progress...", this );
 				}
 				else if( dl.GetDownloadState() == eDOWNLOADSTATE.eDOWNLOADSTATE_PROCESSING )
 				{				
@@ -115,7 +124,8 @@ public class DownloadMgr implements Runnable
 				else
 				{
 					assert( false );
-					System.out.println( "\n\n********Unknown DOWNLOADSTATE encountered....\n\n");
+//					System.out.println( "\n\n********Unknown DOWNLOADSTATE encountered....\n\n");
+					m_LogMgr.LogError( "\n\n********Unknown DOWNLOADSTATE encountered....\n\n", this );
 				}
 			}
 		}
@@ -127,7 +137,8 @@ public class DownloadMgr implements Runnable
 	
 	private void LogCompletedDownloads()
 	{
-		System.out.println( "Completed downloads queue size on LogCompletedDownloads before:  " + m_qCompletedDownloads.size() );
+//		System.out.println( "Completed downloads queue size on LogCompletedDownloads before:  " + m_qCompletedDownloads.size() );
+		m_LogMgr.LogInfo( "Completed downloads queue size on LogCompletedDownloads before:  " + m_qCompletedDownloads.size(), this );
 		
 		for( Iterator<DownloadInfo> it = m_qCompletedDownloads.iterator() ; it.hasNext() ; )
 		{
@@ -145,8 +156,8 @@ public class DownloadMgr implements Runnable
 				it.remove();
 		}
 		
-		System.out.println( "Completed downloads queue size on LogCompletedDownloads after:  " + m_qCompletedDownloads.size() );
-
+//		System.out.println( "Completed downloads queue size on LogCompletedDownloads after:  " + m_qCompletedDownloads.size() );
+		m_LogMgr.LogInfo( "Completed downloads queue size on LogCompletedDownloads after:  " + m_qCompletedDownloads.size(), this );
 	}
 	
 /********************************************************************************/
@@ -176,6 +187,11 @@ public class DownloadMgr implements Runnable
 	{
 		m_bContinue = bContinue;
 	}
+	
+	public void SetLogMgr( LogMgr logMgr )
+	{
+		m_LogMgr = logMgr;
+	}
 
 /********************************************************************************/
 //	MEMBERS
@@ -189,5 +205,8 @@ public class DownloadMgr implements Runnable
 	
 	// local thread members
 	boolean m_bContinue = true;
+	
+	// Log Manager pointer
+	LogMgr m_LogMgr = null;
 	
 }

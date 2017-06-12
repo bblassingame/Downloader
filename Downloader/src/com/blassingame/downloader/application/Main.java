@@ -3,6 +3,8 @@ package com.blassingame.downloader.application;
 import java.util.Scanner;
 
 import com.blassingame.downloader.download.DownloadMgr;
+import com.blassingame.downloader.logger.LogMgr;
+import com.blassingame.downloader.logger.LogMgr.eCONSOLE_LOG_LEVEL;
 import com.blassingame.downloader.show.NewShowInfo;
 import com.blassingame.downloader.show.ShowMgr;
 
@@ -11,7 +13,12 @@ public class Main
 	
 	public static void main(String[] args)
 	{
-		System.out.println( "Starting Video Download..." );
+		LogMgr m_LogMgr = LogMgr.GetLogMgr();
+		m_LogMgr.SetConsoleLogLevel( eCONSOLE_LOG_LEVEL.eCONSOLE_LOG_LEVEL_NONE );
+		Thread m_LogMgrThread = new Thread( m_LogMgr, "Log Mgr" );
+		m_LogMgrThread.start();
+		m_LogMgr.LogDebug( "Log Manager Started", "Main" );
+		
 		DownloadMgr m_DownloadMgr = new DownloadMgr();
 		Thread m_dlMgrThread = new Thread( m_DownloadMgr, "Download Mgr" );
 		m_dlMgrThread.start();
@@ -62,6 +69,7 @@ public class Main
 			e.printStackTrace();
 		}
 		
+		System.out.println( "Good Bye." );
 		System.exit(0);
 	}
 	

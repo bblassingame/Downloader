@@ -1,12 +1,18 @@
 package com.blassingame.downloader.show;
 import java.util.Iterator;
-import java.util.LinkedList;
 
+import com.blassingame.downloader.application.Constants;
 import com.blassingame.downloader.download.DownloadMgr;
+import com.blassingame.downloader.logger.LogMgr;
 import com.blassingame.downloader.utility.FileUtility;
 
 public class ShowMgr implements Runnable
 {
+	
+	public ShowMgr()
+	{
+		m_LogMgr = LogMgr.GetLogMgr();
+	}
 	
 /********************************************************************************/
 //	THREAD FUNCTIONS
@@ -14,7 +20,8 @@ public class ShowMgr implements Runnable
 	@Override
 	public void run()
 	{
-		System.out.println( "Beginning the Show Mgr thread..." );
+//		System.out.println( "Beginning the Show Mgr thread..." );
+		m_LogMgr.LogDebug( "Beginning the Show Mgr thread...", this );
 		
 		Initialize();
 		
@@ -169,14 +176,19 @@ public class ShowMgr implements Runnable
 		m_dlMgr = dlMgr;
 	}
 	
+	public void SetLogMgr( LogMgr logMgr )
+	{
+		m_LogMgr = logMgr;
+	}
+	
 	public String GetLogPath()
 	{
-		return m_strLogPath;
+		return Constants.strLOG_PATH;
 	}
 	
 	public String GetShowLogPath()
 	{
-		return m_strLogPath + "Shows.log";
+		return Constants.strLOG_PATH + "Shows.log";
 	}
 	
 	public String GetSavePath()
@@ -189,7 +201,7 @@ public class ShowMgr implements Runnable
 //	MEMBERS
 /********************************************************************************/
 	// file paths
-	private String m_strLogPath = System.getProperty("user.home") + "\\Documents\\Downloader\\Logs\\";
+//	private String m_strLogPath = System.getProperty("user.home") + "\\Documents\\Downloader\\Logs\\";
 	private String m_strSavePath = System.getProperty("user.home") + "\\Documents\\Downloader\\Shows\\";
 	
 	// show members
@@ -200,6 +212,7 @@ public class ShowMgr implements Runnable
 	
 	// utility pointers
 	private DownloadMgr m_dlMgr = null;
+	private LogMgr m_LogMgr = null;
 	
 	// local thread members
 	boolean m_bContinue = true;
