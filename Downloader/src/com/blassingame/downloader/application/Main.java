@@ -14,7 +14,7 @@ public class Main
 	public static void main(String[] args)
 	{
 		LogMgr m_LogMgr = LogMgr.GetLogMgr();
-		m_LogMgr.SetConsoleLogLevel( eCONSOLE_LOG_LEVEL.eCONSOLE_LOG_LEVEL_NONE );
+		m_LogMgr.SetConsoleLogLevel( eCONSOLE_LOG_LEVEL.eCONSOLE_LOG_LEVEL_ALL );
 		Thread m_LogMgrThread = new Thread( m_LogMgr, "Log Mgr" );
 		m_LogMgrThread.start();
 		m_LogMgr.LogDebug( "Log Manager Started", "Main" );

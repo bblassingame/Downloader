@@ -125,7 +125,7 @@ public class LogMgr implements Runnable
 /********************************************************************************/
 //	INTERNAL FUNCTIONS
 /********************************************************************************/
-	private void ProcessQueues()
+	private synchronized void ProcessQueues()
 	{
 		if( m_eConsoleLoggingLevel.m_nLogLevel >= eCONSOLE_LOG_LEVEL.eCONSOLE_LOG_LEVEL_DEBUG.m_nLogLevel )
 			System.out.println( "\nProcessing Log Queue..." );
@@ -148,17 +148,22 @@ public class LogMgr implements Runnable
 				strOutput.append( "<method_name>  ");
 			
 			if( !logData.m_strLogMessage.isEmpty() )
+			{
 				strOutput.append( logData.m_strLogMessage );
+			}
 			else
 				strOutput.append( "<message>" );				
 			
+			if( strOutput.lastIndexOf("\n") != logData.m_strLogMessage.length() - 1 )
+				strOutput.append( "\n" );
+
 			// log it to the console according to the log level we've got
 			if( logData.m_eLogLevel.m_nLogLevel <= m_eConsoleLoggingLevel.m_nLogLevel )
 			{
-				System.out.println( logData.m_strLogMessage );
+				System.out.println( strOutput.toString() );
+				FileUtility.WriteFile( m_strLogFilePath, strOutput.toString() );
 			}
 			
-			FileUtility.WriteFile( m_strLogFilePath, strOutput.toString() );
 			
 			// finally, remove the log data from the queue
 			it.remove();

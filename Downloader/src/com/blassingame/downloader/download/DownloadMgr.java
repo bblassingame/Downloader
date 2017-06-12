@@ -97,7 +97,7 @@ public class DownloadMgr implements Runnable
 	private void ProcessQueues()
 	{
 //		System.out.println( "\nProcessing Download Queue..." );
-		m_LogMgr.LogDebug( "Processing Download Queue...", this );
+		m_LogMgr.LogAll( "Processing Download Queue...", this );
 
 		if( true == m_bContinue )
 		{
