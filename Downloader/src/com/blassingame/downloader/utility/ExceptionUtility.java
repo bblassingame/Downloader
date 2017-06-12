@@ -8,6 +8,8 @@ import java.util.Date;
 
 import org.ini4j.InvalidFileFormatException;
 
+import com.blassingame.downloader.logger.LogMgr;
+
 public class ExceptionUtility
 {
 
@@ -19,7 +21,9 @@ public class ExceptionUtility
 		else
 			strCause = "Cause Undefined";
 		
-		System.out.println( "General Exception logged with cause:  " + strCause );
+//		System.out.println( "General Exception logged with cause:  " + strCause );
+		LogMgr logMgr = LogMgr.GetLogMgr();
+		logMgr.LogError( "General Exception logged with cause:  " + strCause, "com.blassingame.downloader.utility.ExceptionUtility" );
 		
 		String strLog = "*****General Exception Log*****\r\n";
 		strLog += GetTimeStamp() + "\r\n";
@@ -46,7 +50,9 @@ public class ExceptionUtility
 		else
 			strCause = "Cause Undefined";
 		
-		System.out.println( "IO Exception logged with cause:  " + strCause );
+//		System.out.println( "IO Exception logged with cause:  " + strCause );
+		LogMgr logMgr = LogMgr.GetLogMgr();
+		logMgr.LogError( "IO Exception logged with cause:  " + strCause, "com.blassingame.downloader.utlity.ExceptionUtlity" );
 		
 		String strLog = "*****IO Exception Log*****\r\n";
 		strLog += GetTimeStamp() + "\r\n";
@@ -73,7 +79,9 @@ public class ExceptionUtility
 		else
 			strCause = "Cause Undefined";
 		
-		System.out.println( "Protocol Exception logged with cause:  " + strCause );
+//		System.out.println( "Protocol Exception logged with cause:  " + strCause );
+		LogMgr logMgr = LogMgr.GetLogMgr();
+		logMgr.LogError( "Protocol Exception logged with cause:  " + strCause, "com.blassingame.downloader.utility.ExceptionUtility" );
 		
 		String strLog = "*****Protocol Exception Log*****\r\n";
 		strLog += GetTimeStamp() + "\r\n";
@@ -100,7 +108,9 @@ public class ExceptionUtility
 		else
 			strCause = "Cause Undefined";
 		
-		System.out.println( "File Not Found Exception logged with cause:  " + strCause );
+//		System.out.println( "File Not Found Exception logged with cause:  " + strCause );
+		LogMgr logMgr = LogMgr.GetLogMgr();
+		logMgr.LogError( "File Not Found Exception logged with cause:  " + strCause,  "com.blassingame.downloader.utility.ExceptionUtlity" );
 		
 		String strLog = "*****File Not Found Exception Log*****\r\n";
 		strLog += GetTimeStamp() + "\r\n";
@@ -127,7 +137,9 @@ public class ExceptionUtility
 		else
 			strCause = "Cause Undefined";
 		
-		System.out.println( "URL Exception logged with cause:  " + strCause );
+//		System.out.println( "URL Exception logged with cause:  " + strCause );
+		LogMgr logMgr = LogMgr.GetLogMgr();
+		logMgr.LogError( "URL Exception logged with cause:  " + strCause, "com.blassingame.downloader.utility.ExceptionUtility" );
 		
 		String strLog = "*****URL Exception Log*****\r\n";
 		strLog += GetTimeStamp() + "\r\n";
@@ -154,7 +166,9 @@ public class ExceptionUtility
 		else
 			strCause = "Cause Undefined";
 		
-		System.out.println( "Invalid File Format Exception logged with cause:  " + strCause );
+//		System.out.println( "Invalid File Format Exception logged with cause:  " + strCause );
+		LogMgr logMgr = LogMgr.GetLogMgr();
+		logMgr.LogError( "Invalid File Format Exception logged with cause:  " + strCause, "com.blassingame.downloader.utility.ExceptionUtility" );
 		
 		String strLog = "*****Invalid File Format Exception Log*****\r\n";
 		strLog += GetTimeStamp() + "\r\n";
@@ -181,7 +195,9 @@ public class ExceptionUtility
 		else
 			strCause = "Cause Undefined";
 		
-		System.out.println( "Interrupt Exception logged with cause:  " + strCause );
+//		System.out.println( "Interrupt Exception logged with cause:  " + strCause );
+		LogMgr logMgr = LogMgr.GetLogMgr();
+		logMgr.LogError( "Interrupt Exception logged with cause:  " + strCause, "com.blassingame.downloader.utility.ExceptionUtility" );
 		
 		String strLog = "*****Interrupt Exception Log*****\r\n";
 		strLog += GetTimeStamp() + "\r\n";
@@ -208,7 +224,9 @@ public class ExceptionUtility
 		else
 			strCause = "Cause Undefined";
 		
-		System.out.println( "Number Format Exception logged with cause:  " + strCause );
+//		System.out.println( "Number Format Exception logged with cause:  " + strCause );
+		LogMgr logMgr = LogMgr.GetLogMgr();
+		logMgr.LogError( "Number Format Exception logged with cause:  " + strCause, "com.blassingame.downloader.utility.ExceptionUtility" );
 		
 		String strLog = "*****Number Format Exception Log*****\r\n";
 		strLog += GetTimeStamp() + "\r\n";

@@ -150,7 +150,8 @@ public class DownloadMgr implements Runnable
 			else if( 0 == dlInfo.m_eDownloadStatus.compareTo( eDOWNLOADSTATUS.eDOWNLOADSTATUS_ERROR ) )
 				strStatus = Constants.strINI_VALUE_INCOMPLETE;
 			else
-				System.out.println( "DownloadMgr.LogCompletedDownloads:  We didn't find the right DOWNLOAD status like we thought" );
+//				System.out.println( "DownloadMgr.LogCompletedDownloads:  We didn't find the right DOWNLOAD status like we thought" );
+				m_LogMgr.LogDebug( "DownloadMgr.LogCompletedDownloads:  We didn't find the right DOWNLOAD status like we thought", this );
 			
 			if( dlInfo.m_cbVideoSiteDLComplete.OnDownloadComplete( strStatus ) )
 				it.remove();

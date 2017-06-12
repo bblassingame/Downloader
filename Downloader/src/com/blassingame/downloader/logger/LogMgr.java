@@ -18,8 +18,9 @@ public class LogMgr implements Runnable
 	@Override
 	public void run()
 	{
-		if( m_eConsoleLoggingLevel.m_nLogLevel >= eCONSOLE_LOG_LEVEL.eCONSOLE_LOG_LEVEL_DEBUG.m_nLogLevel )
-			System.out.println( "Beginning the Log Mgr thread..." );
+//		if( m_eConsoleLoggingLevel.m_nLogLevel >= eCONSOLE_LOG_LEVEL.eCONSOLE_LOG_LEVEL_DEBUG.m_nLogLevel )
+//			System.out.println( "Beginning the Log Mgr thread..." );
+		LogDebug( "Beginning the LogMgr thread...", this );
 		
 		while( GetContinue() )
 		{
@@ -127,8 +128,9 @@ public class LogMgr implements Runnable
 /********************************************************************************/
 	private synchronized void ProcessQueues()
 	{
-		if( m_eConsoleLoggingLevel.m_nLogLevel >= eCONSOLE_LOG_LEVEL.eCONSOLE_LOG_LEVEL_DEBUG.m_nLogLevel )
-			System.out.println( "\nProcessing Log Queue..." );
+//		if( m_eConsoleLoggingLevel.m_nLogLevel >= eCONSOLE_LOG_LEVEL.eCONSOLE_LOG_LEVEL_DEBUG.m_nLogLevel )
+//			System.out.println( "\nProcessing Log Queue..." );
+		LogAll( "\nProcessing Log Queue...", this );
 
 		for( Iterator<LogData> it = m_qLogData.iterator() ; it.hasNext() ; )
 		{
