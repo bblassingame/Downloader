@@ -31,3 +31,5 @@ Fix it so that weirdly named episodes such as "The Office Season 9 Special" don'
 Keep looking at why we can't get the file size on a lot of episodes
 Order the log so that the episodes are kept in order in the log, just a convenience thing
 Maybe add an option to grab the smallest file instead of the largest to conserve data
+Better shut down on "quit".  We have threads that don't shut down while the download is going on.  Need to shut down and clean up.
+Maybe look at keeping the list of downloads and stuff in memory so that we can clean that stuff up easier on shut down and on events and just rewrite the file when needed.
