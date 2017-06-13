@@ -24,7 +24,7 @@ public class ParseUtility
 		// make sure the var is in this script, otherwise get out
 		if( -1 == strScript.indexOf( strVar ) )
 		{
-			m_LogMgr.LogError( String.format( "ERROR\tGetJSVarData: \"%s\" doesn't exist in this script", strVar ), "com.blassingame.downloader.utility.ParseUtility" );
+			m_LogMgr.LogError( String.format( "ERROR\tGetJSVarData: \"%s\" doesn't exist in this script", strVar ), ParseUtility.class.getSimpleName() );
 			return "ERROR:  NOT FOUND";
 		}
 		
@@ -52,7 +52,7 @@ public class ParseUtility
 			strChar = "\"";
 		else
 		{
-			m_LogMgr.LogError( String.format( "ERROR\tGetJSVarData: Didn't find a single- or double-quote after our variable instance", strVar ), "com.blassingame.downloader.utility.ParseUtility" );
+			m_LogMgr.LogError( String.format( "ERROR\tGetJSVarData: Didn't find a single- or double-quote after our variable instance", strVar ), ParseUtility.class.getSimpleName() );
 			return "ERROR:  NOT FOUND";
 		}
 
@@ -63,11 +63,11 @@ public class ParseUtility
 			nStartIndex = strScript.indexOf( strChar, nStartIndex ) + 1;
 			nEndIndex = strScript.indexOf( strChar, nStartIndex );
 			strValue = strScript.substring( nStartIndex, nEndIndex );
-			m_LogMgr.LogAll( String.format( "Var %s = %s",  strVar, strValue ), "com.blassingame.downloader.utility.ParseUtility" );
+			m_LogMgr.LogAll( String.format( "Var %s = %s",  strVar, strValue ), ParseUtility.class.getSimpleName() );
 		}
 		else
 		{
-			m_LogMgr.LogError( String.format( "ERROR\tGetJSVarData: Didn't find %s...", strVar ), "com.blassingame.downloader.utility.ParseUtility" );
+			m_LogMgr.LogError( String.format( "ERROR\tGetJSVarData: Didn't find %s...", strVar ), ParseUtility.class.getSimpleName() );
 			strValue = "ERROR:  NOT FOUND";
 		}
 		
@@ -112,7 +112,7 @@ public class ParseUtility
 			strChar = "\"";
 		else
 		{
-			m_LogMgr.LogError( String.format( "ERROR\tGetJSVarData: Didn't find a single- or double-quote after our variable instance", strVar ), "com.blassingame.downloader.utility.ParseUtility" );
+			m_LogMgr.LogError( String.format( "ERROR\tGetJSVarData: Didn't find a single- or double-quote after our variable instance", strVar ), ParseUtility.class.getSimpleName() );
 			return "ERROR:  NOT FOUND";
 		}
 
@@ -123,11 +123,11 @@ public class ParseUtility
 			nStartIndex = strScript.indexOf( strChar, nStartIndex ) + 1;
 			nEndIndex = strScript.indexOf( strChar, nStartIndex );
 			strValue = strScript.substring( nStartIndex, nEndIndex );
-			m_LogMgr.LogAll( String.format( "Var %s = %s",  strVar, strValue ), "com.blassingame.downloader.utility.ParseUtility" );
+			m_LogMgr.LogAll( String.format( "Var %s = %s",  strVar, strValue ), ParseUtility.class.getSimpleName() );
 		}
 		else
 		{
-			m_LogMgr.LogError( String.format( "ERROR\tGetJSVarData: Didn't find %s...", strVar ), "com.blassingame.downloader.utility.ParseUtility" );
+			m_LogMgr.LogError( String.format( "ERROR\tGetJSVarData: Didn't find %s...", strVar ), ParseUtility.class.getSimpleName() );
 			strValue = "ERROR:  NOT FOUND";
 		}
 		
@@ -150,11 +150,11 @@ public class ParseUtility
 			nStartIndex = strJson.indexOf( "\"", nStartIndex ) + 1;
 			nEndIndex = strJson.indexOf( "\"", nStartIndex );
 			strValue = strJson.substring( nStartIndex,  nEndIndex );
-			m_LogMgr.LogAll( String.format( "Var %s = %s",  strVar, strValue ), "com.blassingame.downloader.utility.ParseUtility" );
+			m_LogMgr.LogAll( String.format( "Var %s = %s",  strVar, strValue ), ParseUtility.class.getSimpleName() );
 		}
 		else
 		{
-			m_LogMgr.LogError( String.format( "ERROR\tGetJsonVarData: Didn't find %s...", strVar ), "com.blassingame.downloader.utility.ParseUtility" );
+			m_LogMgr.LogError( String.format( "ERROR\tGetJsonVarData: Didn't find %s...", strVar ), ParseUtility.class.getSimpleName() );
 			strValue = "ERROR:  NOT FOUND";
 		}
 		
@@ -193,7 +193,7 @@ public class ParseUtility
     		{
     			if( nBraceCount == -1 )
     			{
-    				m_LogMgr.LogError( "VideoSite::EvaluateScript  Didn't find well formatted javascript, exiting function", "com.blassingame.downloader.utility.ParseUtility" );
+    				m_LogMgr.LogError( "VideoSite::EvaluateScript  Didn't find well formatted javascript, exiting function", ParseUtility.class.getSimpleName() );
     				return false;
     			}
     			else

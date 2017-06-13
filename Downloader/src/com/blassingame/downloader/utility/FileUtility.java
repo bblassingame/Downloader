@@ -72,7 +72,7 @@ public class FileUtility
 			bw.write( strFileContents );
 			bw.close();
 			
-			m_LogMgr.LogAll( "Write File Complete", "com.blassingame.downloader.utility.FileUtility" );
+			m_LogMgr.LogAll( "Write File Complete", FileUtility.class.getSimpleName() );
 			return true;
 		}
 		catch( IOException e )

@@ -48,7 +48,7 @@ public class LogMgr implements Runnable
 		LogData logData = new LogData();
 		logData.m_strLogMessage = strMessage;
 		logData.m_eLogLevel = eLogLevel;
-		logData.m_strClassName = obj.getClass().getName();
+		logData.m_strClassName = obj.getClass().getSimpleName();
 		m_qLogData.add( logData );
 	}
 	
@@ -67,7 +67,7 @@ public class LogMgr implements Runnable
 		LogData logData = new LogData();
 		logData.m_strLogMessage = strMessage;
 		logData.m_eLogLevel = eCONSOLE_LOG_LEVEL.eCONSOLE_LOG_LEVEL_ALL;
-		logData.m_strClassName = obj.getClass().getName();
+		logData.m_strClassName = obj.getClass().getSimpleName();
 		m_qLogData.add( logData );
 	}
 	
@@ -87,7 +87,7 @@ public class LogMgr implements Runnable
 		LogData logData = new LogData();
 		logData.m_strLogMessage = strMessage;
 		logData.m_eLogLevel = eCONSOLE_LOG_LEVEL.eCONSOLE_LOG_LEVEL_DEBUG;
-		logData.m_strClassName = obj.getClass().getName();
+		logData.m_strClassName = obj.getClass().getSimpleName();
 		m_qLogData.add( logData );
 	}
 	
@@ -107,7 +107,7 @@ public class LogMgr implements Runnable
 		LogData logData = new LogData();
 		logData.m_strLogMessage = strMessage;
 		logData.m_eLogLevel = eCONSOLE_LOG_LEVEL.eCONSOLE_LOG_LEVEL_ERROR;
-		logData.m_strClassName = obj.getClass().getName();
+		logData.m_strClassName = obj.getClass().getSimpleName();
 		m_qLogData.add( logData );
 	}
 	
@@ -126,7 +126,7 @@ public class LogMgr implements Runnable
 		LogData logData = new LogData();
 		logData.m_strLogMessage = strMessage;
 		logData.m_eLogLevel = eCONSOLE_LOG_LEVEL.eCONSOLE_LOG_LEVEL_INFO;
-		logData.m_strClassName = obj.getClass().getName();
+		logData.m_strClassName = obj.getClass().getSimpleName();
 		m_qLogData.add( logData );
 	}
 	
@@ -150,40 +150,45 @@ public class LogMgr implements Runnable
 		{
 			LogData logData = it.next();
 			
-			// create the message that we're going to log
-			StringBuffer strOutput = new StringBuffer();
-			
-			if( !logData.m_strClassName.isEmpty() )
-				strOutput.append( logData.m_strClassName + "." );
-			else
-				strOutput.append( "<class_name>." );
-			
-			if( !logData.m_strMethodName.isEmpty() )
-				strOutput.append( logData.m_strMethodName + "  " );
-			else
-				strOutput.append( "<method_name>  ");
-			
-			if( !logData.m_strLogMessage.isEmpty() )
-			{
-				strOutput.append( logData.m_strLogMessage );
-			}
-			else
-				strOutput.append( "<message>" );				
-			
-			if( strOutput.lastIndexOf("\n") != logData.m_strLogMessage.length() - 1 )
-				strOutput.append( "\n" );
+			String strOutput = ComposeMessage( logData );
 
 			// log it to the console according to the log level we've got
 			if( logData.m_eLogLevel.m_nLogLevel <= m_eConsoleLoggingLevel.m_nLogLevel )
 			{
-				System.out.println( strOutput.toString() );
-				FileUtility.WriteFile( m_strLogFilePath, strOutput.toString() );
+				System.out.println( strOutput );
+				FileUtility.WriteFile( m_strLogFilePath, strOutput );
 			}
-			
 			
 			// finally, remove the log data from the queue
 			it.remove();
 		}
+	}
+	
+	private String ComposeMessage( LogData logData )
+	{
+		StringBuffer strBuffer = new StringBuffer();
+		
+		if( !logData.m_strClassName.isEmpty() )
+			strBuffer.append( logData.m_strClassName + "." );
+		else
+			strBuffer.append( "<class_name>." );
+		
+		if( !logData.m_strMethodName.isEmpty() )
+			strBuffer.append( logData.m_strMethodName + "  " );
+		else
+			strBuffer.append( "<method_name>  ");
+		
+		if( !logData.m_strLogMessage.isEmpty() )
+		{
+			strBuffer.append( logData.m_strLogMessage );
+		}
+		else
+			strBuffer.append( "<message>" );				
+		
+		if( strBuffer.lastIndexOf("\n") != logData.m_strLogMessage.length() - 1 )
+			strBuffer.append( "\n" );
+
+		return strBuffer.toString();
 	}
 	
 /********************************************************************************/

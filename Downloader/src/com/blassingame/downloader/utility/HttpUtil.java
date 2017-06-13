@@ -63,12 +63,12 @@ public class HttpUtil
 		
 			// in case we want to debug how long the html file is
 			int nLength = httpConnection.getContentLength();
-			m_LogMgr.LogAll( String.format( "Fetching HTML file %d bytes", nLength ), "com.blassingame.downloader.utility.HttpUtil" );
+			m_LogMgr.LogAll( String.format( "Fetching HTML file %d bytes", nLength ), HttpUtil.class.getSimpleName() );
 			
 
 			// get the response code and handle a redirect
 			int nResponseCode = httpConnection.getResponseCode();
-			m_LogMgr.LogAll( "Response Code : " + nResponseCode, "com.blassingame.downloader.utility.HttpUtil" );
+			m_LogMgr.LogAll( "Response Code : " + nResponseCode, HttpUtil.class.getSimpleName() );
 			nResponseCode /= 100;
 			if( 3 == nResponseCode )
 			{
@@ -148,7 +148,7 @@ public class HttpUtil
 		{
 			if( 200 != httpConnection.getResponseCode() )
 			{
-				m_LogMgr.LogError( httpConnection.getResponseCode() + " returned during HttpUtil.GetFileSize.", "com.blassingame.downloader.utility.HttpUtil" );
+				m_LogMgr.LogError( httpConnection.getResponseCode() + " returned during HttpUtil.GetFileSize.", HttpUtil.class.getSimpleName() );
 		        httpConnection.disconnect();
 		        DumpRequestProps( httpConnection );
 				DumpResponseHeaders( httpConnection );
@@ -162,7 +162,7 @@ public class HttpUtil
 			
         // actually starts getting the file
 		lReturn = httpConnection.getContentLength();
-		m_LogMgr.LogAll( String.format( "The file is %d bytes long", lReturn ), "com.blassingame.downloader.utility.HttpUtil" );
+		m_LogMgr.LogAll( String.format( "The file is %d bytes long", lReturn ), HttpUtil.class.getSimpleName() );
 
 		// use this for debugging the headers
 		DumpResponseHeaders( httpConnection );
@@ -194,14 +194,14 @@ public class HttpUtil
             // actually starts getting the file
             long lCompleteFileSize = httpConnection.getContentLength();
             dlInfo.m_nResponseCode = httpConnection.getResponseCode();
-            m_LogMgr.LogAll( String.format( "The file is %d bytes long", lCompleteFileSize ), "com.blassingame.downloader.utility.HttpUtil" );
+            m_LogMgr.LogAll( String.format( "The file is %d bytes long", lCompleteFileSize ), HttpUtil.class.getSimpleName() );
 
 			// use this for debugging the headers
 			DumpResponseHeaders( httpConnection );
 			
             // set up the full file path that we're saving
             String strSavePath = dlInfo.m_strSavePath + dlInfo.m_strName;
-            m_LogMgr.LogAll( String.format( "Save path is:  %s", strSavePath ), "com.blassingame.downloader.utility.HttpUtil" );
+            m_LogMgr.LogAll( String.format( "Save path is:  %s", strSavePath ), HttpUtil.class.getSimpleName() );
 			
 			// set up the guys needed to write out the file
             BufferedInputStream in = new BufferedInputStream(httpConnection.getInputStream());
