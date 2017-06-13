@@ -1,5 +1,4 @@
 package com.blassingame.downloader.utility;
-import java.util.ArrayList;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.*;
@@ -7,6 +6,7 @@ import org.jsoup.select.*;
 
 import com.blassingame.downloader.application.Constants;
 import com.blassingame.downloader.download.DownloadInfo;
+import com.blassingame.downloader.logger.LogMgr;
 
 public class ParseUtility
 {
@@ -24,7 +24,7 @@ public class ParseUtility
 		// make sure the var is in this script, otherwise get out
 		if( -1 == strScript.indexOf( strVar ) )
 		{
-			System.out.println( String.format( "ERROR\tGetJSVarData: \"%s\" doesn't exist in this script", strVar ) );
+			m_LogMgr.LogError( String.format( "ERROR\tGetJSVarData: \"%s\" doesn't exist in this script", strVar ), "com.blassingame.downloader.utility.ParseUtility" );
 			return "ERROR:  NOT FOUND";
 		}
 		
@@ -39,7 +39,7 @@ public class ParseUtility
 		
 		if( -1 == nStartIndex )
 		{
-			System.out.println( String.format( "ERROR\tGetJSVarData: Didn't find the %d occurance of \"%s\"", nOccurance + 1, strVar ) );
+			m_LogMgr.LogError( String.format( "ERROR\tGetJSVarData: Didn't find the %d occurance of \"%s\"", nOccurance + 1, strVar ), "com.blassingame.downloader.utlity.ParseUtility" );
 			return "ERROR:  NOT FOUND";
 		}
 		
@@ -52,7 +52,7 @@ public class ParseUtility
 			strChar = "\"";
 		else
 		{
-			System.out.println( String.format( "ERROR\tGetJSVarData: Didn't find a single- or double-quote after our variable instance", strVar ) );
+			m_LogMgr.LogError( String.format( "ERROR\tGetJSVarData: Didn't find a single- or double-quote after our variable instance", strVar ), "com.blassingame.downloader.utility.ParseUtility" );
 			return "ERROR:  NOT FOUND";
 		}
 
@@ -63,11 +63,11 @@ public class ParseUtility
 			nStartIndex = strScript.indexOf( strChar, nStartIndex ) + 1;
 			nEndIndex = strScript.indexOf( strChar, nStartIndex );
 			strValue = strScript.substring( nStartIndex, nEndIndex );
-//			System.out.println( String.format( "Var %s = %s",  strVar, strValue ) );
+			m_LogMgr.LogAll( String.format( "Var %s = %s",  strVar, strValue ), "com.blassingame.downloader.utility.ParseUtility" );
 		}
 		else
 		{
-			System.out.println( String.format( "ERROR\tGetJSVarData: Didn't find %s...", strVar ) );
+			m_LogMgr.LogError( String.format( "ERROR\tGetJSVarData: Didn't find %s...", strVar ), "com.blassingame.downloader.utility.ParseUtility" );
 			strValue = "ERROR:  NOT FOUND";
 		}
 		
@@ -112,7 +112,7 @@ public class ParseUtility
 			strChar = "\"";
 		else
 		{
-			System.out.println( String.format( "ERROR\tGetJSVarData: Didn't find a single- or double-quote after our variable instance", strVar ) );
+			m_LogMgr.LogError( String.format( "ERROR\tGetJSVarData: Didn't find a single- or double-quote after our variable instance", strVar ), "com.blassingame.downloader.utility.ParseUtility" );
 			return "ERROR:  NOT FOUND";
 		}
 
@@ -123,11 +123,11 @@ public class ParseUtility
 			nStartIndex = strScript.indexOf( strChar, nStartIndex ) + 1;
 			nEndIndex = strScript.indexOf( strChar, nStartIndex );
 			strValue = strScript.substring( nStartIndex, nEndIndex );
-//			System.out.println( String.format( "Var %s = %s",  strVar, strValue ) );
+			m_LogMgr.LogAll( String.format( "Var %s = %s",  strVar, strValue ), "com.blassingame.downloader.utility.ParseUtility" );
 		}
 		else
 		{
-			System.out.println( String.format( "ERROR\tGetJSVarData: Didn't find %s...", strVar ) );
+			m_LogMgr.LogError( String.format( "ERROR\tGetJSVarData: Didn't find %s...", strVar ), "com.blassingame.downloader.utility.ParseUtility" );
 			strValue = "ERROR:  NOT FOUND";
 		}
 		
@@ -150,11 +150,11 @@ public class ParseUtility
 			nStartIndex = strJson.indexOf( "\"", nStartIndex ) + 1;
 			nEndIndex = strJson.indexOf( "\"", nStartIndex );
 			strValue = strJson.substring( nStartIndex,  nEndIndex );
-//			System.out.println( String.format( "Var %s = %s",  strVar, strValue ) );
+			m_LogMgr.LogAll( String.format( "Var %s = %s",  strVar, strValue ), "com.blassingame.downloader.utility.ParseUtility" );
 		}
 		else
 		{
-			System.out.println( String.format( "ERROR\tGetJsonVarData: Didn't find %s...", strVar ) );
+			m_LogMgr.LogError( String.format( "ERROR\tGetJsonVarData: Didn't find %s...", strVar ), "com.blassingame.downloader.utility.ParseUtility" );
 			strValue = "ERROR:  NOT FOUND";
 		}
 		
@@ -193,7 +193,7 @@ public class ParseUtility
     		{
     			if( nBraceCount == -1 )
     			{
-    				System.out.println( "VideoSite::EvaluateScript  Didn't find well formatted javascript, exiting function" );
+    				m_LogMgr.LogError( "VideoSite::EvaluateScript  Didn't find well formatted javascript, exiting function", "com.blassingame.downloader.utility.ParseUtility" );
     				return false;
     			}
     			else
@@ -413,5 +413,7 @@ public class ParseUtility
 		
 		return dataScripts;
 	}
+	
+	private static LogMgr m_LogMgr = LogMgr.GetLogMgr();
 	
 }

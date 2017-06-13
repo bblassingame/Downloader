@@ -21,7 +21,6 @@ public class ExceptionUtility
 		else
 			strCause = "Cause Undefined";
 		
-//		System.out.println( "General Exception logged with cause:  " + strCause );
 		LogMgr logMgr = LogMgr.GetLogMgr();
 		logMgr.LogError( "General Exception logged with cause:  " + strCause, "com.blassingame.downloader.utility.ExceptionUtility" );
 		
@@ -50,7 +49,6 @@ public class ExceptionUtility
 		else
 			strCause = "Cause Undefined";
 		
-//		System.out.println( "IO Exception logged with cause:  " + strCause );
 		LogMgr logMgr = LogMgr.GetLogMgr();
 		logMgr.LogError( "IO Exception logged with cause:  " + strCause, "com.blassingame.downloader.utlity.ExceptionUtlity" );
 		
@@ -79,7 +77,6 @@ public class ExceptionUtility
 		else
 			strCause = "Cause Undefined";
 		
-//		System.out.println( "Protocol Exception logged with cause:  " + strCause );
 		LogMgr logMgr = LogMgr.GetLogMgr();
 		logMgr.LogError( "Protocol Exception logged with cause:  " + strCause, "com.blassingame.downloader.utility.ExceptionUtility" );
 		
@@ -108,7 +105,6 @@ public class ExceptionUtility
 		else
 			strCause = "Cause Undefined";
 		
-//		System.out.println( "File Not Found Exception logged with cause:  " + strCause );
 		LogMgr logMgr = LogMgr.GetLogMgr();
 		logMgr.LogError( "File Not Found Exception logged with cause:  " + strCause,  "com.blassingame.downloader.utility.ExceptionUtlity" );
 		
@@ -137,7 +133,6 @@ public class ExceptionUtility
 		else
 			strCause = "Cause Undefined";
 		
-//		System.out.println( "URL Exception logged with cause:  " + strCause );
 		LogMgr logMgr = LogMgr.GetLogMgr();
 		logMgr.LogError( "URL Exception logged with cause:  " + strCause, "com.blassingame.downloader.utility.ExceptionUtility" );
 		
@@ -166,7 +161,6 @@ public class ExceptionUtility
 		else
 			strCause = "Cause Undefined";
 		
-//		System.out.println( "Invalid File Format Exception logged with cause:  " + strCause );
 		LogMgr logMgr = LogMgr.GetLogMgr();
 		logMgr.LogError( "Invalid File Format Exception logged with cause:  " + strCause, "com.blassingame.downloader.utility.ExceptionUtility" );
 		
@@ -195,7 +189,6 @@ public class ExceptionUtility
 		else
 			strCause = "Cause Undefined";
 		
-//		System.out.println( "Interrupt Exception logged with cause:  " + strCause );
 		LogMgr logMgr = LogMgr.GetLogMgr();
 		logMgr.LogError( "Interrupt Exception logged with cause:  " + strCause, "com.blassingame.downloader.utility.ExceptionUtility" );
 		
@@ -224,7 +217,6 @@ public class ExceptionUtility
 		else
 			strCause = "Cause Undefined";
 		
-//		System.out.println( "Number Format Exception logged with cause:  " + strCause );
 		LogMgr logMgr = LogMgr.GetLogMgr();
 		logMgr.LogError( "Number Format Exception logged with cause:  " + strCause, "com.blassingame.downloader.utility.ExceptionUtility" );
 		

@@ -18,8 +18,6 @@ public class LogMgr implements Runnable
 	@Override
 	public void run()
 	{
-//		if( m_eConsoleLoggingLevel.m_nLogLevel >= eCONSOLE_LOG_LEVEL.eCONSOLE_LOG_LEVEL_DEBUG.m_nLogLevel )
-//			System.out.println( "Beginning the Log Mgr thread..." );
 		LogDebug( "Beginning the LogMgr thread...", this );
 		
 		while( GetContinue() )
@@ -43,6 +41,24 @@ public class LogMgr implements Runnable
 	public static LogMgr GetLogMgr()
 	{
 		return m_sLogMgr;
+	}
+	
+	public void LogMessage( String strMessage, Object obj, eCONSOLE_LOG_LEVEL eLogLevel )
+	{
+		LogData logData = new LogData();
+		logData.m_strLogMessage = strMessage;
+		logData.m_eLogLevel = eLogLevel;
+		logData.m_strClassName = obj.getClass().getName();
+		m_qLogData.add( logData );
+	}
+	
+	public void LogMessage( String strMessage, String strClassName, eCONSOLE_LOG_LEVEL eLogLevel )
+	{
+		LogData logData = new LogData();
+		logData.m_strLogMessage = strMessage;
+		logData.m_eLogLevel = eLogLevel;
+		logData.m_strClassName = strClassName;
+		m_qLogData.add( logData );
 	}
 	
 	// this is the lowest level of debugging where everything will be output to the console
@@ -128,8 +144,6 @@ public class LogMgr implements Runnable
 /********************************************************************************/
 	private synchronized void ProcessQueues()
 	{
-//		if( m_eConsoleLoggingLevel.m_nLogLevel >= eCONSOLE_LOG_LEVEL.eCONSOLE_LOG_LEVEL_DEBUG.m_nLogLevel )
-//			System.out.println( "\nProcessing Log Queue..." );
 		LogAll( "\nProcessing Log Queue...", this );
 
 		for( Iterator<LogData> it = m_qLogData.iterator() ; it.hasNext() ; )

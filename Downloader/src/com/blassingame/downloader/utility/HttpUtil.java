@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.blassingame.downloader.download.DownloadInfo;
+import com.blassingame.downloader.logger.LogMgr;
 
 
 public class HttpUtil
@@ -61,19 +62,20 @@ public class HttpUtil
 			httpData.m_httpURLConnection = httpConnection;
 		
 			// in case we want to debug how long the html file is
-//			int nLength = httpConnection.getContentLength();
-//			System.out.println( String.format( "Fetching HTML file %d bytes", nLength ) );
+			int nLength = httpConnection.getContentLength();
+			m_LogMgr.LogAll( String.format( "Fetching HTML file %d bytes", nLength ), "com.blassingame.downloader.utility.HttpUtil" );
+			
 
 			// get the response code and handle a redirect
 			int nResponseCode = httpConnection.getResponseCode();
-//			System.out.println( "Response Code : " + nResponseCode );
+			m_LogMgr.LogAll( "Response Code : " + nResponseCode, "com.blassingame.downloader.utility.HttpUtil" );
 			nResponseCode /= 100;
 			if( 3 == nResponseCode )
 			{
 				// get the new location from the response headers
 				Map<String,List<String>> mapHeaders = httpConnection.getHeaderFields();
 				httpData.m_urlPage = ReturnURL( mapHeaders.get( "Location" ).get(0) );
-//				DebugComm( httpConnection );
+				DumpResponseHeaders( httpConnection );
 
 				// reset the number of retries as this function will exit and we'll want to be able to retry 3 more times
 				httpData.m_nRetries = 3;
@@ -81,7 +83,7 @@ public class HttpUtil
 			}
 			
 			// use this for debugging the headers
-//			DebugComm( httpConnection );
+			DumpResponseHeaders( httpConnection );
 			
 			BufferedReader in = null;
 			in = new BufferedReader( new InputStreamReader( httpConnection.getInputStream() ) );
@@ -146,10 +148,10 @@ public class HttpUtil
 		{
 			if( 200 != httpConnection.getResponseCode() )
 			{
-				System.out.println( httpConnection.getResponseCode() + " returned during HttpUtil.GetFileSize." );
+				m_LogMgr.LogError( httpConnection.getResponseCode() + " returned during HttpUtil.GetFileSize.", "com.blassingame.downloader.utility.HttpUtil" );
 		        httpConnection.disconnect();
-//		        DumpRequestProps( httpConnection );
-				DebugComm( httpConnection );
+		        DumpRequestProps( httpConnection );
+				DumpResponseHeaders( httpConnection );
 		        return -1;
 			}
 		}
@@ -160,10 +162,10 @@ public class HttpUtil
 			
         // actually starts getting the file
 		lReturn = httpConnection.getContentLength();
-//        System.out.println( String.format( "The file is %d bytes long", lReturn ) );
+		m_LogMgr.LogAll( String.format( "The file is %d bytes long", lReturn ), "com.blassingame.downloader.utility.HttpUtil" );
 
 		// use this for debugging the headers
-//		DebugComm( httpConnection );
+		DumpResponseHeaders( httpConnection );
         
         httpConnection.disconnect();
 			
@@ -190,16 +192,16 @@ public class HttpUtil
 			/****************************************************/
 			
             // actually starts getting the file
-//            long lCompleteFileSize = httpConnection.getContentLength();
+            long lCompleteFileSize = httpConnection.getContentLength();
             dlInfo.m_nResponseCode = httpConnection.getResponseCode();
-//            System.out.println( String.format( "The file is %d bytes long", lCompleteFileSize ) );
+            m_LogMgr.LogAll( String.format( "The file is %d bytes long", lCompleteFileSize ), "com.blassingame.downloader.utility.HttpUtil" );
 
 			// use this for debugging the headers
-//			DebugComm( httpConnection );
+			DumpResponseHeaders( httpConnection );
 			
             // set up the full file path that we're saving
             String strSavePath = dlInfo.m_strSavePath + dlInfo.m_strName;
-//			System.out.println( String.format( "Save path is:  %s", strSavePath ) );
+            m_LogMgr.LogAll( String.format( "Save path is:  %s", strSavePath ), "com.blassingame.downloader.utility.HttpUtil" );
 			
 			// set up the guys needed to write out the file
             BufferedInputStream in = new BufferedInputStream(httpConnection.getInputStream());
@@ -223,7 +225,7 @@ public class HttpUtil
 //                	break;
             }
             
-            System.out.println("");
+//            System.out.println("");
             
             bout.close();
             in.close();
@@ -297,7 +299,7 @@ public class HttpUtil
 				}
 			}
 			
-//			DumpRequestProps( httpConnection );
+			DumpRequestProps( httpConnection );
 			
 			return httpConnection;
 		}
@@ -338,35 +340,22 @@ public class HttpUtil
 // Communication/HTTP Debugging
 /*********************************************************************************************/
 		
-	private void DebugComm( HttpURLConnection httpConn )
-	{
-		DebugComm( httpConn, false );
-	}
-	
-	private void DebugComm( HttpURLConnection httpConn, boolean bDumpRequestHeaders )
-	{
-		System.out.println( "\n\n**** DebugComm - Dumping HTTP Headers...");
-		System.out.println( "**** HTTP URL:  " + httpConn.getURL() );
-		if( true == bDumpRequestHeaders )
-			DumpRequestProps( httpConn );
-		DumpResponseHeaders( httpConn );
-		System.out.println( "\n" );
-	}
-	
 	private void DumpResponseHeaders( HttpURLConnection httpConn )
 	{
-		System.out.println( "\n**** Dumping Headers Fields..." );
+		StringBuffer strBuffer = new StringBuffer();
+		strBuffer.append( "\n\n**** Dumping Headers Fields..." );
+		strBuffer.append( "**** HTTP URL:  " + httpConn.getURL() );
 		Map<String,List<String>> mapHeaders = httpConn.getHeaderFields();
 		for (Map.Entry<String,List<String>> entry : mapHeaders.entrySet() )
 		{
 			String strKey = entry.getKey();
 			List<String> aValues = entry.getValue();
-			System.out.print( String.format( "**** %s : ", strKey ) );
+			
+			strBuffer.append( String.format( "**** %s : ", strKey ) );
 			for( String strValue : aValues )
-			{
-				System.out.print( String.format( " %s; ", strValue ) );
-			}
-			System.out.println("");
+				strBuffer.append( String.format( " %s; ", strValue ) );
+			
+			strBuffer.append( "\n" );
 		}
 	}
 	
@@ -374,18 +363,20 @@ public class HttpUtil
 	// you can call this function in the SetUpConnection function to debug the request headers
 	private void DumpRequestProps( HttpURLConnection httpConn )
 	{
-		System.out.println( "\n**** Dumping Request Properties..." );
+		StringBuffer strBuffer = new StringBuffer();
+		strBuffer.append( "\n\n**** Dumping Request Properties..." );
+		strBuffer.append( "**** HTTP URL:  " + httpConn.getURL() );
 		Map<String,List<String>> mapReqProp = httpConn.getRequestProperties();
 		for (Map.Entry<String,List<String>> entry : mapReqProp.entrySet() )
 		{
 			String strKey = entry.getKey();
 			List<String> aValues = entry.getValue();
-			System.out.print( String.format( "**** %s : ", strKey ) );
+			
+			strBuffer.append( String.format( "**** %s : ", strKey ) );
 			for( String strValue : aValues )
-			{
-				System.out.print( String.format( " %s; ", strValue ) );
-			}
-			System.out.println("");
+				strBuffer.append( String.format( " %s; ", strValue ) );
+				
+			strBuffer.append( "\n" );
 		}
 	}
 
@@ -397,19 +388,19 @@ public class HttpUtil
 	private void HandleException( Exception e, HttpURLConnection httpConn, String strMsg )
 	{
 		ExceptionUtility.DoExceptionWork( e, strMsg );
-//		OutputResponseCode( httpConn );
+		OutputResponseCode( httpConn );
 	}
 	
 	private void HandleIOException( IOException e, HttpURLConnection httpConn, String strMsg )
 	{
 		ExceptionUtility.DoIOExceptionWork( e, strMsg );
-//		OutputResponseCode( httpConn );
+		OutputResponseCode( httpConn );
 	}
 	
 	private void HandleProtException( ProtocolException e, HttpURLConnection httpConn, String strMsg )
 	{
 		ExceptionUtility.DoProtExceptionWork( e, strMsg );
-//		OutputResponseCode( httpConn );
+		OutputResponseCode( httpConn );
 	}
 	
 	private void HandleMalformedURLException( MalformedURLException e, String strMsg )
@@ -420,13 +411,13 @@ public class HttpUtil
 	private void HandleMalformedURLException( MalformedURLException e, HttpURLConnection httpConn, String strMsg )
 	{
 		ExceptionUtility.DoURLExceptionWork( e, strMsg );
-//		OutputResponseCode( httpConn );
+		OutputResponseCode( httpConn );
 	}
 	
 	private void HandleFNFException( FileNotFoundException e, HttpURLConnection httpConn, String strMsg )
 	{
 		ExceptionUtility.DoFNFExceptionWork( e, strMsg );
-//		OutputResponseCode( httpConn );
+		OutputResponseCode( httpConn );
 	}
 	
 	private void OutputResponseCode( HttpURLConnection httpConn )
@@ -435,7 +426,7 @@ public class HttpUtil
 		{
 			try
 			{
-				System.out.println( String.format( "ResponseCode:  %d", httpConn.getResponseCode() ) );
+				m_LogMgr.LogError( String.format( "ResponseCode:  %d", httpConn.getResponseCode() ), "com.blassiname.downloader.utility.HttpUtil" );
 			}
 			catch( IOException eIO )
 			{
@@ -443,5 +434,7 @@ public class HttpUtil
 			}
 		}
 	}
+	
+	private static LogMgr m_LogMgr = LogMgr.GetLogMgr();
 	
 }

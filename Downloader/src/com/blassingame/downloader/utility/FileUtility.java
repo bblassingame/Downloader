@@ -11,6 +11,8 @@ import java.util.Set;
 
 import org.ini4j.*;
 
+import com.blassingame.downloader.logger.LogMgr;
+
 public class FileUtility
 {
 	// this is currently used for simply reading a file from disk for parsing
@@ -70,13 +72,12 @@ public class FileUtility
 			bw.write( strFileContents );
 			bw.close();
 			
-//			System.out.println("Done");
+			m_LogMgr.LogAll( "Write File Complete", "com.blassingame.downloader.utility.FileUtility" );
 			return true;
 		}
 		catch( IOException e )
 		{
-			System.out.println("----> Error writing to log file");
-			e.printStackTrace();
+			ExceptionUtility.DoIOExceptionWork( e, "----> Error writing to log file" );
 			return false;
 		}
 	}
@@ -294,9 +295,11 @@ public class FileUtility
 		}
 		catch( Exception e )
 		{
-			e.printStackTrace();
-			System.out.println( String.format("We couldn't move a file:\n\tOld File Path:  %s\n\tNew File Path:  %s", strOldPath, strNewPath ) );
+			ExceptionUtility.DoExceptionWork( e, String.format("We couldn't move a file:\n\tOld File Path:  %s\n\tNew File Path:  %s", strOldPath, strNewPath ) );
 		}
 	}
 	
+	static LogMgr m_LogMgr = LogMgr.GetLogMgr();
+	
 }
+

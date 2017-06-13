@@ -33,7 +33,6 @@ public class DownloadMgr implements Runnable
 	@Override
 	public void run()
 	{
-//		System.out.println( "Beginning the Download Mgr thread..." );
 		m_LogMgr.LogDebug( "Beginning the Download Mgr thread...", this );
 		while( GetContinue() )
 		{
@@ -75,7 +74,6 @@ public class DownloadMgr implements Runnable
 	public synchronized void AddDownload( DownloadInfo dlInfo )
 	{
 		m_qWaitingDownloads.add( dlInfo );
-//		System.out.println( "Download Added:  " + dlInfo.m_strName + "  " + dlInfo.m_strType + "  " + dlInfo.m_strURL + "    Num of Waiting Downloads:  " + m_qWaitingDownloads.size() );
 		m_LogMgr.LogInfo( "Download Added:  " + dlInfo.m_strName + "  " + dlInfo.m_strType + "  " + dlInfo.m_strURL + "    Num of Waiting Downloads:  " + m_qWaitingDownloads.size(), this );
 	}
 	
@@ -85,8 +83,6 @@ public class DownloadMgr implements Runnable
 	public synchronized void AddCompletedDownloadInfo( DownloadInfo dlInfo )
 	{
 		m_qCompletedDownloads.add( dlInfo );
-//		System.out.println( "Download " + dlInfo.m_strName + "  " + dlInfo.m_strType + "  finished with status  " + dlInfo.m_eDownloadStatus + "\nNum of Waiting Downloads:  " + m_qWaitingDownloads.size() );
-//		System.out.println( "Completed downloads queue size on AddCompletedDownloadInfo:  " + m_qCompletedDownloads.size() );
 		m_LogMgr.LogInfo( "Download " + dlInfo.m_strName + "  " + dlInfo.m_strType + "  finished with status  " + dlInfo.m_eDownloadStatus + "\nNum of Waiting Downloads:  " + m_qWaitingDownloads.size(), this );
 		m_LogMgr.LogInfo( "Completed downloads queue size on AddCompletedDownloadInfo:  " + m_qCompletedDownloads.size(), this );
 	}
@@ -96,7 +92,6 @@ public class DownloadMgr implements Runnable
 /********************************************************************************/
 	private void ProcessQueues()
 	{
-//		System.out.println( "\nProcessing Download Queue..." );
 		m_LogMgr.LogAll( "Processing Download Queue...", this );
 
 		if( true == m_bContinue )
@@ -112,7 +107,6 @@ public class DownloadMgr implements Runnable
 				}
 				else if( dl.GetDownloadState() == eDOWNLOADSTATE.eDOWNLOADSTATE_DOWNLOADING )
 				{
-//					System.out.println( "Download In Progress..." );
 					m_LogMgr.LogDebug( "Download In Progress...", this );
 				}
 				else if( dl.GetDownloadState() == eDOWNLOADSTATE.eDOWNLOADSTATE_PROCESSING )
@@ -124,7 +118,6 @@ public class DownloadMgr implements Runnable
 				else
 				{
 					assert( false );
-//					System.out.println( "\n\n********Unknown DOWNLOADSTATE encountered....\n\n");
 					m_LogMgr.LogError( "\n\n********Unknown DOWNLOADSTATE encountered....\n\n", this );
 				}
 			}
@@ -137,7 +130,6 @@ public class DownloadMgr implements Runnable
 	
 	private void LogCompletedDownloads()
 	{
-//		System.out.println( "Completed downloads queue size on LogCompletedDownloads before:  " + m_qCompletedDownloads.size() );
 		m_LogMgr.LogInfo( "Completed downloads queue size on LogCompletedDownloads before:  " + m_qCompletedDownloads.size(), this );
 		
 		for( Iterator<DownloadInfo> it = m_qCompletedDownloads.iterator() ; it.hasNext() ; )
@@ -150,14 +142,12 @@ public class DownloadMgr implements Runnable
 			else if( 0 == dlInfo.m_eDownloadStatus.compareTo( eDOWNLOADSTATUS.eDOWNLOADSTATUS_ERROR ) )
 				strStatus = Constants.strINI_VALUE_INCOMPLETE;
 			else
-//				System.out.println( "DownloadMgr.LogCompletedDownloads:  We didn't find the right DOWNLOAD status like we thought" );
 				m_LogMgr.LogDebug( "DownloadMgr.LogCompletedDownloads:  We didn't find the right DOWNLOAD status like we thought", this );
 			
 			if( dlInfo.m_cbVideoSiteDLComplete.OnDownloadComplete( strStatus ) )
 				it.remove();
 		}
 		
-//		System.out.println( "Completed downloads queue size on LogCompletedDownloads after:  " + m_qCompletedDownloads.size() );
 		m_LogMgr.LogInfo( "Completed downloads queue size on LogCompletedDownloads after:  " + m_qCompletedDownloads.size(), this );
 	}
 	
