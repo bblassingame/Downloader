@@ -34,3 +34,4 @@ Maybe add an option to grab the smallest file instead of the largest to conserve
 Better shut down on "quit".  We have threads that don't shut down while the download is going on.  Need to shut down and clean up.
 Maybe look at keeping the list of downloads and stuff in memory so that we can clean that stuff up easier on shut down and on events and just rewrite the file when needed.
 Get the info about the download length and time back on the console
+	along with the above, create a "UI" that uses a set character space for reporting information, similar to a 32x70 screen
