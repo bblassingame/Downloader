@@ -21,6 +21,7 @@ public class DownloadMgr implements Runnable
 		{
 			String strThreadName = String.format( "Download Thread %d", i );
 			Download thread = new Download( strThreadName );
+			thread.SetLogMgr( m_LogMgr );
 			thread.SetDownloadMgr( this );
 			m_aDownloads.add( thread );
 			thread.start();
@@ -92,7 +93,7 @@ public class DownloadMgr implements Runnable
 /********************************************************************************/
 	private void ProcessQueues()
 	{
-		m_LogMgr.LogAll( "Processing Download Queue...", this );
+		m_LogMgr.LogAll( "Processing Download Queue...", this, true );
 
 		if( true == m_bContinue )
 		{

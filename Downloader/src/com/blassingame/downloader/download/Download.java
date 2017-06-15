@@ -1,4 +1,5 @@
 package com.blassingame.downloader.download;
+import com.blassingame.downloader.logger.LogMgr;
 import com.blassingame.downloader.utility.FileUtility;
 import com.blassingame.downloader.utility.HttpUtil;
 import com.blassingame.downloader.utility.StringArray;
@@ -33,7 +34,7 @@ public class Download extends Thread
 	@Override
 	public void run()
 	{
-		System.out.println( "Beginning a Download thread..." );
+		m_LogMgr.LogDebug( "Beginning a Download thread...", this );
 		
 		while( GetContinue() )
 		{
@@ -43,7 +44,7 @@ public class Download extends Thread
 			}
 			else if( m_eDownloadState == eDOWNLOADSTATE.eDOWNLOADSTATE_DOWNLOADING )
 			{
-//				System.out.println( "Got to the downloading state, this shouldn't happen" );
+				m_LogMgr.LogError( "Got to the downloading state, this shouldn't happen", this );
 				DoDownload();
 			}
 			else if( m_eDownloadState == eDOWNLOADSTATE.eDOWNLOADSTATE_PROCESSING )
@@ -147,6 +148,11 @@ public class Download extends Thread
 		m_bContinue = bContinue;
 	}
 	
+	public synchronized void SetLogMgr( LogMgr logMgr )
+	{
+		m_LogMgr = logMgr;
+	}
+	
 /********************************************************************************/
 //	OVERRIDES
 /********************************************************************************/
@@ -171,5 +177,7 @@ public class Download extends Thread
 	private DownloadMgr m_dlMgr;
 	
 	private boolean m_bContinue = true;
+	
+	private LogMgr m_LogMgr = null;
 
 }

@@ -40,131 +40,245 @@ public class LogMgr implements Runnable
 /********************************************************************************/
 	public static LogMgr GetLogMgr()
 	{
-		return m_sLogMgr;
+		LogMgr logMgr = m_LogMgr;
+		
+		if( null == logMgr )
+		{
+			synchronized( lock )
+			{
+				logMgr = m_LogMgr;
+				if( null == logMgr )
+				{
+					logMgr = new LogMgr();
+					m_LogMgr = logMgr;
+				}
+			}
+		}
+		
+		return logMgr;
 	}
 	
 	public void LogMessage( String strMessage, Object obj, eCONSOLE_LOG_LEVEL eLogLevel )
 	{
+		LogMessage( strMessage, obj, eLogLevel, false );
+	}
+	
+	public void LogMessage( String strMessage, Object obj, eCONSOLE_LOG_LEVEL eLogLevel, boolean bConsoleOnly )
+	{
 		LogData logData = new LogData();
-		logData.m_strLogMessage = strMessage;
+		logData.m_strConsoleMessage = strMessage;
 		logData.m_eLogLevel = eLogLevel;
 		logData.m_strClassName = obj.getClass().getSimpleName();
-		m_qLogData.add( logData );
+		logData.m_bConsoleOnly = bConsoleOnly;
+		synchronized( lock )
+		{
+			m_qLogData.add( logData );
+		}
 	}
 	
 	public void LogMessage( String strMessage, String strClassName, eCONSOLE_LOG_LEVEL eLogLevel )
 	{
+		LogMessage( strMessage, strClassName, eLogLevel, false );
+	}
+	
+	public void LogMessage( String strMessage, String strClassName, eCONSOLE_LOG_LEVEL eLogLevel, boolean bConsoleOnly )
+	{
 		LogData logData = new LogData();
-		logData.m_strLogMessage = strMessage;
+		logData.m_strConsoleMessage = strMessage;
 		logData.m_eLogLevel = eLogLevel;
 		logData.m_strClassName = strClassName;
-		m_qLogData.add( logData );
+		synchronized( lock )
+		{
+			m_qLogData.add( logData );
+		}
 	}
 	
 	// this is the lowest level of debugging where everything will be output to the console
-	public synchronized void LogAll( String strMessage, Object obj )
+	public void LogAll( String strMessage, Object obj )
 	{
-		LogData logData = new LogData();
-		logData.m_strLogMessage = strMessage;
-		logData.m_eLogLevel = eCONSOLE_LOG_LEVEL.eCONSOLE_LOG_LEVEL_ALL;
-		logData.m_strClassName = obj.getClass().getSimpleName();
-		m_qLogData.add( logData );
+		LogAll( strMessage, obj, false );
 	}
 	
-	public synchronized void LogAll( String strMessage, String strClassName )
+	public void LogAll( String strMessage, Object obj, boolean bConsoleOnly )
 	{
 		LogData logData = new LogData();
-		logData.m_strLogMessage = strMessage;
+		logData.m_strConsoleMessage = strMessage;
+		logData.m_eLogLevel = eCONSOLE_LOG_LEVEL.eCONSOLE_LOG_LEVEL_ALL;
+		logData.m_strClassName = obj.getClass().getSimpleName();
+		logData.m_bConsoleOnly = bConsoleOnly;
+		synchronized( lock )
+		{
+			m_qLogData.add( logData );
+		}
+	}
+	
+	public void LogAll( String strMessage, String strClassName )
+	{
+		LogAll( strMessage, strClassName, false );
+	}
+	
+	public void LogAll( String strMessage, String strClassName, boolean bConsoleOnly )
+	{
+		LogData logData = new LogData();
+		logData.m_strConsoleMessage = strMessage;
 		logData.m_eLogLevel = eCONSOLE_LOG_LEVEL.eCONSOLE_LOG_LEVEL_ALL;
 		logData.m_strClassName = strClassName;
-		m_qLogData.add( logData );
+		logData.m_bConsoleOnly = bConsoleOnly;
+		synchronized( lock )
+		{
+			m_qLogData.add( logData );
+		}
 	}
 	
 	// this level of logging should log stuff that's pertinent to what we've recently done
 	// but still want to have some visibility in.
-	public synchronized void LogDebug( String strMessage, Object obj )
+	public void LogDebug( String strMessage, Object obj )
 	{
-		LogData logData = new LogData();
-		logData.m_strLogMessage = strMessage;
-		logData.m_eLogLevel = eCONSOLE_LOG_LEVEL.eCONSOLE_LOG_LEVEL_DEBUG;
-		logData.m_strClassName = obj.getClass().getSimpleName();
-		m_qLogData.add( logData );
+		LogDebug( strMessage, obj, false );
 	}
 	
-	public synchronized void LogDebug( String strMessage, String strClassName )
+	public void LogDebug( String strMessage, Object obj, boolean bConsoleOnly )
 	{
 		LogData logData = new LogData();
-		logData.m_strLogMessage = strMessage;
+		logData.m_strConsoleMessage = strMessage;
+		logData.m_eLogLevel = eCONSOLE_LOG_LEVEL.eCONSOLE_LOG_LEVEL_DEBUG;
+		logData.m_strClassName = obj.getClass().getSimpleName();
+		logData.m_bConsoleOnly = bConsoleOnly;
+		synchronized( lock )
+		{
+			m_qLogData.add( logData );
+		}
+	}
+	
+	public void LogDebug( String strMessage, String strClassName )
+	{
+		LogDebug( strMessage, strClassName, false );
+	}
+	
+	public void LogDebug( String strMessage, String strClassName, boolean bConsoleOnly )
+	{
+		LogData logData = new LogData();
+		logData.m_strConsoleMessage = strMessage;
 		logData.m_eLogLevel = eCONSOLE_LOG_LEVEL.eCONSOLE_LOG_LEVEL_DEBUG;
 		logData.m_strClassName = strClassName;
-		m_qLogData.add( logData );
+		logData.m_bConsoleOnly = bConsoleOnly;
+		synchronized( lock )
+		{
+			m_qLogData.add( logData );
+		}
 	}
 	
 	// this should be used to make sure that we see exceptions that we're throwing so that we
 	// can take action to correct them
-	public synchronized void LogError( String strMessage, Object obj )
+	public void LogError( String strMessage, Object obj )
 	{
-		LogData logData = new LogData();
-		logData.m_strLogMessage = strMessage;
-		logData.m_eLogLevel = eCONSOLE_LOG_LEVEL.eCONSOLE_LOG_LEVEL_ERROR;
-		logData.m_strClassName = obj.getClass().getSimpleName();
-		m_qLogData.add( logData );
+		LogError( strMessage, obj, false );
 	}
 	
-	public synchronized void LogError( String strMessage, String strClassName )
+	public void LogError( String strMessage, Object obj, boolean bConsoleOnly )
 	{
 		LogData logData = new LogData();
-		logData.m_strLogMessage = strMessage;
+		logData.m_strConsoleMessage = strMessage;
+		logData.m_eLogLevel = eCONSOLE_LOG_LEVEL.eCONSOLE_LOG_LEVEL_ERROR;
+		logData.m_strClassName = obj.getClass().getSimpleName();
+		logData.m_bConsoleOnly = bConsoleOnly;
+		synchronized( lock )
+		{
+			m_qLogData.add( logData );
+		}
+	}
+	
+	public void LogError( String strMessage, String strClassName )
+	{
+		LogError( strMessage, strClassName, false );
+	}
+	
+	public void LogError( String strMessage, String strClassName, boolean bConsoleOnly )
+	{
+		LogData logData = new LogData();
+		logData.m_strConsoleMessage = strMessage;
 		logData.m_eLogLevel = eCONSOLE_LOG_LEVEL.eCONSOLE_LOG_LEVEL_ERROR;
 		logData.m_strClassName = strClassName;
-		m_qLogData.add( logData );
+		logData.m_bConsoleOnly = bConsoleOnly;
+		synchronized( lock )
+		{
+			m_qLogData.add( logData );
+		}
 	}
 	
 	// this is really for what you're immediately working on right now.
-	public synchronized void LogInfo( String strMessage, Object obj )
+	public void LogInfo( String strMessage, Object obj )
 	{
-		LogData logData = new LogData();
-		logData.m_strLogMessage = strMessage;
-		logData.m_eLogLevel = eCONSOLE_LOG_LEVEL.eCONSOLE_LOG_LEVEL_INFO;
-		logData.m_strClassName = obj.getClass().getSimpleName();
-		m_qLogData.add( logData );
+		LogInfo( strMessage, obj, false );
 	}
 	
-	public synchronized void LogInfo( String strMessage, String strClassName )
+	public void LogInfo( String strMessage, Object obj, boolean bConsoleOnly )
 	{
 		LogData logData = new LogData();
-		logData.m_strLogMessage = strMessage;
+		logData.m_strConsoleMessage = strMessage;
+		logData.m_eLogLevel = eCONSOLE_LOG_LEVEL.eCONSOLE_LOG_LEVEL_INFO;
+		logData.m_strClassName = obj.getClass().getSimpleName();
+		logData.m_bConsoleOnly = bConsoleOnly;
+		synchronized( lock )
+		{
+			m_qLogData.add( logData );
+		}
+	}
+	
+	public void LogInfo( String strMessage, String strClassName )
+	{
+		LogInfo( strMessage, strClassName, false );
+	}
+	
+	public void LogInfo( String strMessage, String strClassName, boolean bConsoleOnly )
+	{
+		LogData logData = new LogData();
+		logData.m_strConsoleMessage = strMessage;
 		logData.m_eLogLevel = eCONSOLE_LOG_LEVEL.eCONSOLE_LOG_LEVEL_ERROR;
 		logData.m_strClassName = strClassName;
-		m_qLogData.add( logData );
+		logData.m_bConsoleOnly = bConsoleOnly;
+		synchronized( lock )
+		{
+			m_qLogData.add( logData );
+		}
 	}
 	
 /********************************************************************************/
 //	INTERNAL FUNCTIONS
 /********************************************************************************/
-	private synchronized void ProcessQueues()
+	private void ProcessQueues()
 	{
-		LogAll( "\nProcessing Log Queue...", this );
+		LogAll( "Processing Log Queue...", this, true );
 
-		for( Iterator<LogData> it = m_qLogData.iterator() ; it.hasNext() ; )
+		// copy the message queue to a local queue to be processed.  That way the lock
+		// doesn't take a long time and we don't have anything building up behind it.
+		LogDataQueue qLocalQueue = new LogDataQueue();
+		synchronized( lock )
+		{
+			qLocalQueue.addAll( m_qLogData );
+			m_qLogData.clear();
+		}
+		
+		// process the local message queue that we created earlier.
+		for( Iterator<LogData> it = qLocalQueue.iterator() ; it.hasNext() ; )
 		{
 			LogData logData = it.next();
 			
-			String strOutput = ComposeMessage( logData );
+			ComposeMessage( logData );
 
 			// log it to the console according to the log level we've got
 			if( logData.m_eLogLevel.m_nLogLevel <= m_eConsoleLoggingLevel.m_nLogLevel )
-			{
-				System.out.println( strOutput );
-				FileUtility.WriteFile( m_strLogFilePath, strOutput );
-			}
+				System.out.println( logData.m_strConsoleMessage );
+
+			if( true != logData.m_bConsoleOnly )
+				FileUtility.WriteFile( m_strLogFilePath, logData.m_strFileMessage );
 			
 			// finally, remove the log data from the queue
 			it.remove();
 		}
 	}
 	
-	private String ComposeMessage( LogData logData )
+	private void ComposeMessage( LogData logData )
 	{
 		StringBuffer strBuffer = new StringBuffer();
 		
@@ -178,17 +292,16 @@ public class LogMgr implements Runnable
 		else
 			strBuffer.append( "<method_name>  ");
 		
-		if( !logData.m_strLogMessage.isEmpty() )
+		if( !logData.m_strConsoleMessage.isEmpty() )
 		{
-			strBuffer.append( logData.m_strLogMessage );
+			strBuffer.append( logData.m_strConsoleMessage );
 		}
 		else
-			strBuffer.append( "<message>" );				
+			strBuffer.append( "<message>" );
 		
-		if( strBuffer.lastIndexOf("\n") != logData.m_strLogMessage.length() - 1 )
-			strBuffer.append( "\n" );
-
-		return strBuffer.toString();
+		logData.m_strFileMessage = logData.m_strConsoleMessage;
+		if( logData.m_strFileMessage.lastIndexOf("\n") != logData.m_strFileMessage.length() - 1 )
+			logData.m_strFileMessage += "\n";
 	}
 	
 /********************************************************************************/
@@ -209,25 +322,32 @@ public class LogMgr implements Runnable
 /********************************************************************************/
 //	GETTERS/SETTERS
 /********************************************************************************/
-	public synchronized boolean GetContinue()
+	public boolean GetContinue()
 	{
 		return m_bContinue;
 	}
 	
-	public synchronized void SetContinue( boolean bContinue )
+	public void SetContinue( boolean bContinue )
 	{
-		m_bContinue = bContinue;
+		synchronized( lock )
+		{
+			m_bContinue = bContinue;
+		}
 	}
 	
-	public synchronized void SetConsoleLogLevel( eCONSOLE_LOG_LEVEL eLogLevel )
+	public void SetConsoleLogLevel( eCONSOLE_LOG_LEVEL eLogLevel )
 	{
-		m_eConsoleLoggingLevel = eLogLevel;
+		synchronized( lock )
+		{
+			m_eConsoleLoggingLevel = eLogLevel;
+		}
 	}
 
 /********************************************************************************/
 //	MEMBERS
 /*******************************************************************************/
-	private static LogMgr m_sLogMgr = new LogMgr();
+	private static final Object lock = new Object();
+	private static volatile LogMgr m_LogMgr;
 	private eCONSOLE_LOG_LEVEL m_eConsoleLoggingLevel = eCONSOLE_LOG_LEVEL.eCONSOLE_LOG_LEVEL_NONE;
 	private String m_strLogFilePath = Constants.strLOG_PATH + "DownloaderLog.txt";
 	
