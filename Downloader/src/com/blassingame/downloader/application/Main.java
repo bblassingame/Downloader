@@ -17,7 +17,8 @@ public class Main
 		m_LogMgr.SetConsoleLogLevel( eCONSOLE_LOG_LEVEL.eCONSOLE_LOG_LEVEL_NONE );
 		Thread m_LogMgrThread = new Thread( m_LogMgr, "Log Mgr" );
 		m_LogMgrThread.start();
-		m_LogMgr.LogDebug( "Log Manager Started", "Main" );
+		m_LogMgr.LogDebug( "\nLog Manager Started", "Main" );
+		m_LogMgr.LogAll( "\n\n*****Downloader Startup*****\n\n", "Main" );
 		
 		DownloadMgr m_DownloadMgr = new DownloadMgr();
 		Thread m_dlMgrThread = new Thread( m_DownloadMgr, "Download Mgr" );
